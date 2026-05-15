@@ -210,7 +210,7 @@ function buildMessages(prompt, targetLanguage) {
     },
     {
       role: "user",
-      content: prompt
+      content: `Please review and improve the following Claude Code prompt written in its original form:\n\n${prompt}`
     }
   ];
 }
