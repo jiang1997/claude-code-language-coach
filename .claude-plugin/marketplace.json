@@ -1,0 +1,22 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "language-learning",
+  "description": "Language learning plugin for Claude Code — analyze English prompts and translate Chinese to English.",
+  "owner": {
+    "name": "jieke"
+  },
+  "plugins": [
+    {
+      "name": "language-learning",
+      "description": "Shows English grammar suggestions or Chinese-to-English translations for prompts before Claude Code processes them.",
+      "author": {
+        "name": "jieke"
+      },
+      "source": {
+        "source": "url",
+        "url": "https://github.com/jiang1997/claude-code-language-learning.git",
+        "ref": "master"
+      }
+    }
+  ]
+}
