@@ -12,7 +12,6 @@ Feedback is shown through a hook `systemMessage` by default. That means the sugg
 - `.claude-plugin/plugin.json`: plugin metadata and user configuration
 - `hooks/hooks.json`: `UserPromptSubmit` hook registration
 - `scripts/language-helper.js`: OpenAI-compatible API client and language feedback logic
-- `test/language-helper.test.js`: local test harness with a mock OpenAI-compatible server
 
 ## Configure
 
@@ -49,13 +48,6 @@ Then enable it inside Claude Code:
 
 ```text
 /plugin
-```
-
-## Run Tests
-
-```sh
-node test/language-helper.test.js
-claude plugin validate .
 ```
 
 ## Privacy
