@@ -39,31 +39,18 @@ The script also recognizes `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_API_BASE
 
 ## Install
 
-From the GitHub repository:
+Clone the repository and load it with `--plugin-dir`:
 
 ```sh
-claude plugin install https://github.com/jiang1997/claude-code-language-learning.git
+git clone https://github.com/jiang1997/claude-code-language-learning.git
+cd claude-code-language-learning
+claude --plugin-dir "$PWD"
 ```
 
 Then enable it inside Claude Code:
 
 ```text
 /plugin
-```
-
-## Try Locally
-
-For development, run Claude Code from this directory so it loads the plugin directly:
-
-```sh
-claude --plugin-dir "$PWD"
-```
-
-Then enable or reload the plugin from Claude Code:
-
-```text
-/plugin
-/reload-plugins
 ```
 
 ## Run Tests
