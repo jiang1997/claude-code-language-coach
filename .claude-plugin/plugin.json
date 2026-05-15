@@ -38,9 +38,9 @@
       "type": "number",
       "title": "API timeout in milliseconds",
       "description": "Maximum time to wait for the external model before letting the prompt continue without feedback.",
-      "default": 12000,
+      "default": 60000,
       "min": 1000,
-      "max": 60000
+      "max": 300000
     },
     "max_prompt_chars": {
       "type": "number",

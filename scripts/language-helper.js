@@ -4,7 +4,7 @@
 
 const DEFAULT_BASE_URL = "https://api.openai.com/v1";
 const DEFAULT_MODEL = "gpt-4o-mini";
-const DEFAULT_TIMEOUT_MS = 12000;
+const DEFAULT_TIMEOUT_MS = 60000;
 const DEFAULT_MAX_PROMPT_CHARS = 4000;
 const DEFAULT_TARGET_LANGUAGE = "English";
 const OUTPUT_LIMIT = 9500;
