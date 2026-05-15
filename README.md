@@ -2,9 +2,8 @@
 
 This Claude Code plugin gives prompt-level language feedback before Claude processes your message.
 
-- If your prompt is in English, it checks grammar and suggests a more natural version.
-- If your prompt is in Chinese, it translates it into a concise Claude Code prompt in your chosen target language (English by default).
-- If your prompt mixes Chinese and English, it translates and polishes the full prompt.
+- If your prompt is already in your chosen target language, it checks grammar and suggests a more natural version.
+- If your prompt is in another language, it translates it into a concise Claude Code prompt in your chosen target language.
 
 Feedback is shown through a hook `systemMessage` by default. That means the suggestions are visible in Claude Code but are not inserted into Claude's model context. Enable `inject_context` only if you want Claude to also receive the language feedback.
 
