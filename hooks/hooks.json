@@ -1,5 +1,5 @@
 {
-  "description": "Language learning feedback before each user prompt",
+  "description": "Language coach feedback before each user prompt",
   "hooks": {
     "UserPromptSubmit": [
       {

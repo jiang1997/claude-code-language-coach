@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
-  "name": "language-learning",
+  "name": "language-coach",
   "version": "0.2.0",
   "description": "Shows grammar suggestions and translates prompts into a configurable target language.",
   "author": {

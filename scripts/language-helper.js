@@ -12,7 +12,7 @@ const OUTPUT_LIMIT = 9500;
 const env = process.env;
 
 main().catch((error) => {
-  emitSystemMessage(`Language Learning hook failed: ${formatError(error)}`);
+  emitSystemMessage(`Language Coach hook failed: ${formatError(error)}`);
 });
 
 async function main() {
@@ -37,14 +37,14 @@ async function main() {
 
   if (!config.apiKey) {
     emitSystemMessage(
-      "Language Learning plugin is not configured: set the plugin API key or LL_HELPER_API_KEY."
+      "Language Coach plugin is not configured: set the plugin API key or LL_HELPER_API_KEY."
     );
     return;
   }
 
   if (!config.model) {
     emitSystemMessage(
-      "Language Learning plugin is not configured: set the plugin model or LL_HELPER_MODEL."
+      "Language Coach plugin is not configured: set the plugin model or LL_HELPER_MODEL."
     );
     return;
   }
@@ -272,7 +272,7 @@ function chatCompletionsUrl(baseUrl) {
 
 function formatFeedback(content, targetLanguage) {
   const target = targetLanguage || DEFAULT_TARGET_LANGUAGE;
-  return truncate(`Language Learning (${target} prompt feedback)\n\n${content}`, OUTPUT_LIMIT);
+  return truncate(`Language Coach (${target} prompt feedback)\n\n${content}`, OUTPUT_LIMIT);
 }
 
 function emitSystemMessage(message, options = {}) {

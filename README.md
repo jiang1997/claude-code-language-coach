@@ -1,4 +1,4 @@
-# Claude Code Language Learning Plugin
+# Claude Code Language Coach Plugin
 
 This Claude Code plugin gives prompt-level language feedback before Claude processes your message.
 
@@ -40,8 +40,8 @@ The script also recognizes `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_API_BASE
 Add the marketplace from GitHub and install the plugin:
 
 ```sh
-claude plugin marketplace add https://github.com/jiang1997/claude-code-language-learning
-claude plugin install language-learning@language-learning
+claude plugin marketplace add https://github.com/jiang1997/claude-code-language-coach
+claude plugin install language-coach@language-coach
 ```
 
 Then enable it inside Claude Code:
