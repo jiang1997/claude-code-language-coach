@@ -49,6 +49,12 @@
       "default": 4000,
       "min": 100,
       "max": 20000
+    },
+    "target_language": {
+      "type": "string",
+      "title": "Target language",
+      "description": "The language to translate prompts into or check grammar against.",
+      "default": "English"
     }
   }
 }

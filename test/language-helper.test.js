@@ -12,6 +12,7 @@ const helperPath = path.join(__dirname, "..", "scripts", "language-helper.js");
 async function main() {
   await testEnglishFeedback();
   await testChineseTranslation();
+  await testCustomTargetLanguage();
   testSkipsSlashCommands();
   testMissingKeyMessage();
   console.log("language-helper tests passed");
@@ -85,6 +86,42 @@ async function testChineseTranslation() {
     assert.match(parsed.systemMessage, /Help me explain this error/);
     assert.equal(parsed.hookSpecificOutput.hookEventName, "UserPromptSubmit");
     assert.match(parsed.hookSpecificOutput.additionalContext, /Language helper feedback/);
+  } finally {
+    await server.close();
+  }
+}
+
+async function testCustomTargetLanguage() {
+  const server = await createMockServer(({ body }) => {
+    assert.match(body.messages[0].content, /Translate the user's Chinese/);
+    assert.match(body.messages[0].content, /Japanese/);
+    assert.equal(body.messages[1].content, "帮我解释这个错误");
+    return {
+      choices: [
+        {
+          message: {
+            content: "- Improved: このエラーの説明を手伝ってください。\n- Notes: Natural Japanese phrasing."
+          }
+        }
+      ]
+    };
+  });
+
+  try {
+    const output = await runHookAsync(
+      { hook_event_name: "UserPromptSubmit", prompt: "帮我解释这个错误" },
+      {
+        CLAUDE_PLUGIN_OPTION_api_key: "test-key",
+        CLAUDE_PLUGIN_OPTION_base_url: server.baseUrl,
+        CLAUDE_PLUGIN_OPTION_model: "mock-model",
+        CLAUDE_PLUGIN_OPTION_target_language: "Japanese"
+      }
+    );
+
+    assert.equal(output.status, 0);
+    const parsed = JSON.parse(output.stdout);
+    assert.match(parsed.systemMessage, /Chinese to Japanese/);
+    assert.match(parsed.systemMessage, /このエラーの説明/);
   } finally {
     await server.close();
   }

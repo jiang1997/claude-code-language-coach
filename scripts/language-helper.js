@@ -6,6 +6,7 @@ const DEFAULT_BASE_URL = "https://api.openai.com/v1";
 const DEFAULT_MODEL = "gpt-4o-mini";
 const DEFAULT_TIMEOUT_MS = 12000;
 const DEFAULT_MAX_PROMPT_CHARS = 4000;
+const DEFAULT_TARGET_LANGUAGE = "English";
 const OUTPUT_LIMIT = 9500;
 
 const env = process.env;
@@ -53,8 +54,8 @@ async function main() {
     return;
   }
 
-  const content = await callChatCompletions(config, buildMessages(mode, prompt));
-  const message = formatFeedback(mode, content);
+  const content = await callChatCompletions(config, buildMessages(mode, prompt, config.targetLanguage));
+  const message = formatFeedback(mode, content, config.targetLanguage);
   emitSystemMessage(message, {
     injectContext: config.injectContext,
     hookEventName: input.hook_event_name
@@ -140,7 +141,11 @@ function readConfig() {
       DEFAULT_MAX_PROMPT_CHARS,
       100,
       20000
-    )
+    ),
+    targetLanguage:
+      readPluginOption("target_language") ||
+      env.LL_HELPER_TARGET_LANGUAGE ||
+      DEFAULT_TARGET_LANGUAGE
   };
 }
 
@@ -213,13 +218,20 @@ function countMatches(value, regex) {
   return (value.match(regex) || []).length;
 }
 
-function buildMessages(mode, prompt) {
-  const task =
-    mode === "chinese"
-      ? "Translate the user's Chinese Claude Code prompt into natural, concise English."
-      : mode === "mixed"
-        ? "Translate any Chinese text and polish the full prompt into natural English."
-        : "Check the user's English Claude Code prompt for grammar, clarity, and natural wording.";
+function buildMessages(mode, prompt, targetLanguage) {
+  const target = targetLanguage || DEFAULT_TARGET_LANGUAGE;
+  const isEnglishTarget = target.toLowerCase() === "english";
+
+  let task;
+  if (mode === "chinese") {
+    task = `Translate the user's Chinese Claude Code prompt into natural, concise ${target}.`;
+  } else if (mode === "mixed") {
+    task = `Translate any Chinese text and polish the full prompt into natural ${target}.`;
+  } else if (mode === "english" && isEnglishTarget) {
+    task = "Check the user's English Claude Code prompt for grammar, clarity, and natural wording.";
+  } else {
+    task = `Translate and polish the user's Claude Code prompt into natural, concise ${target}.`;
+  }
 
   return [
     {
@@ -295,13 +307,20 @@ function chatCompletionsUrl(baseUrl) {
   return `${trimmed}/chat/completions`;
 }
 
-function formatFeedback(mode, content) {
-  const label =
-    mode === "chinese"
-      ? "Chinese to English"
-      : mode === "mixed"
-        ? "Mixed prompt polish"
-        : "English prompt feedback";
+function formatFeedback(mode, content, targetLanguage) {
+  const target = targetLanguage || DEFAULT_TARGET_LANGUAGE;
+  const isEnglishTarget = target.toLowerCase() === "english";
+
+  let label;
+  if (mode === "chinese") {
+    label = `Chinese to ${target}`;
+  } else if (mode === "mixed") {
+    label = isEnglishTarget ? "Mixed prompt polish" : `Mixed to ${target}`;
+  } else if (mode === "english" && isEnglishTarget) {
+    label = "English prompt feedback";
+  } else {
+    label = `Prompt feedback (${target})`;
+  }
 
   return truncate(`Language Learning (${label})\n\n${content}`, OUTPUT_LIMIT);
 }
