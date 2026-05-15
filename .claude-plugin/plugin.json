@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "language-learning",
-  "version": "0.1.0",
-  "description": "Shows English grammar suggestions or Chinese-to-English translations for prompts before Claude Code processes them.",
+  "version": "0.2.0",
+  "description": "Shows grammar suggestions and translates prompts into a configurable target language.",
   "author": {
     "name": "local"
   },
