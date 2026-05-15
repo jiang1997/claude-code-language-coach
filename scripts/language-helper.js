@@ -49,13 +49,8 @@ async function main() {
     return;
   }
 
-  const mode = detectMode(prompt);
-  if (mode === "unknown") {
-    return;
-  }
-
-  const content = await callChatCompletions(config, buildMessages(mode, prompt, config.targetLanguage));
-  const message = formatFeedback(mode, content, config.targetLanguage);
+  const content = await callChatCompletions(config, buildMessages(prompt, config.targetLanguage));
+  const message = formatFeedback(content, config.targetLanguage);
   emitSystemMessage(message, {
     injectContext: config.injectContext,
     hookEventName: input.hook_event_name
@@ -195,56 +190,22 @@ function looksLikeMostlyCodeOrLogs(prompt) {
   return codeishLines.length / lines.length >= 0.45;
 }
 
-function detectMode(prompt) {
-  const chineseCount = countMatches(prompt, /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/g);
-  const latinCount = countMatches(prompt, /[A-Za-z]/g);
-
-  if (chineseCount > 0 && latinCount > 0) {
-    return "mixed";
-  }
-
-  if (chineseCount > 0) {
-    return "chinese";
-  }
-
-  if (latinCount > 0) {
-    return "english";
-  }
-
-  return "unknown";
-}
-
-function countMatches(value, regex) {
-  return (value.match(regex) || []).length;
-}
-
-function buildMessages(mode, prompt, targetLanguage) {
+function buildMessages(prompt, targetLanguage) {
   const target = targetLanguage || DEFAULT_TARGET_LANGUAGE;
-  const isEnglishTarget = target.toLowerCase() === "english";
-
-  let task;
-  if (mode === "chinese") {
-    task = `Translate the user's Chinese Claude Code prompt into natural, concise ${target}.`;
-  } else if (mode === "mixed") {
-    task = `Translate any Chinese text and polish the full prompt into natural ${target}.`;
-  } else if (mode === "english" && isEnglishTarget) {
-    task = "Check the user's English Claude Code prompt for grammar, clarity, and natural wording.";
-  } else {
-    task = `Translate and polish the user's Claude Code prompt into natural, concise ${target}.`;
-  }
 
   return [
     {
       role: "system",
       content: [
-        "You are a concise language tutor helping a developer write better Claude Code prompts.",
-        task,
+        `You are a concise language tutor helping a developer write better Claude Code prompts in ${target}.`,
+        `If the user's prompt is already in ${target}, check it for grammar, clarity, and natural wording.`,
+        `If the user's prompt is in another language, translate it into natural, concise ${target}.`,
         "Do not answer or solve the user's coding request.",
         "Output Markdown only.",
         "Use this structure exactly:",
-        "- Improved: one polished English version of the prompt.",
+        `- Improved: one polished version of the prompt in ${target}.`,
         "- Notes: up to three short bullets explaining grammar, word choice, or translation choices.",
-        "If the original English is already natural, say so in Notes and keep Improved nearly identical."
+        `If the original prompt is already natural ${target}, say so in Notes and keep Improved nearly identical.`
       ].join("\n")
     },
     {
@@ -307,22 +268,9 @@ function chatCompletionsUrl(baseUrl) {
   return `${trimmed}/chat/completions`;
 }
 
-function formatFeedback(mode, content, targetLanguage) {
+function formatFeedback(content, targetLanguage) {
   const target = targetLanguage || DEFAULT_TARGET_LANGUAGE;
-  const isEnglishTarget = target.toLowerCase() === "english";
-
-  let label;
-  if (mode === "chinese") {
-    label = `Chinese to ${target}`;
-  } else if (mode === "mixed") {
-    label = isEnglishTarget ? "Mixed prompt polish" : `Mixed to ${target}`;
-  } else if (mode === "english" && isEnglishTarget) {
-    label = "English prompt feedback";
-  } else {
-    label = `Prompt feedback (${target})`;
-  }
-
-  return truncate(`Language Learning (${label})\n\n${content}`, OUTPUT_LIMIT);
+  return truncate(`Language Learning (${target} prompt feedback)\n\n${content}`, OUTPUT_LIMIT);
 }
 
 function emitSystemMessage(message, options = {}) {

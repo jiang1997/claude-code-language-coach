@@ -21,7 +21,7 @@ async function main() {
 async function testEnglishFeedback() {
   const server = await createMockServer(({ body }) => {
     assert.equal(body.model, "mock-model");
-    assert.match(body.messages[0].content, /Check the user's English/);
+    assert.match(body.messages[0].content, /If the user's prompt is already in English/);
     assert.equal(body.messages[1].content, "I has a question about this function.");
     return {
       choices: [
@@ -56,7 +56,7 @@ async function testEnglishFeedback() {
 
 async function testChineseTranslation() {
   const server = await createMockServer(({ body }) => {
-    assert.match(body.messages[0].content, /Translate the user's Chinese/);
+    assert.match(body.messages[0].content, /translate it into natural, concise English/);
     assert.equal(body.messages[1].content, "帮我解释这个错误");
     return {
       choices: [
@@ -82,7 +82,7 @@ async function testChineseTranslation() {
 
     assert.equal(output.status, 0);
     const parsed = JSON.parse(output.stdout);
-    assert.match(parsed.systemMessage, /Chinese to English/);
+    assert.match(parsed.systemMessage, /English prompt feedback/);
     assert.match(parsed.systemMessage, /Help me explain this error/);
     assert.equal(parsed.hookSpecificOutput.hookEventName, "UserPromptSubmit");
     assert.match(parsed.hookSpecificOutput.additionalContext, /Language helper feedback/);
@@ -93,7 +93,7 @@ async function testChineseTranslation() {
 
 async function testCustomTargetLanguage() {
   const server = await createMockServer(({ body }) => {
-    assert.match(body.messages[0].content, /Translate the user's Chinese/);
+    assert.match(body.messages[0].content, /translate it into natural, concise Japanese/);
     assert.match(body.messages[0].content, /Japanese/);
     assert.equal(body.messages[1].content, "帮我解释这个错误");
     return {
@@ -120,7 +120,7 @@ async function testCustomTargetLanguage() {
 
     assert.equal(output.status, 0);
     const parsed = JSON.parse(output.stdout);
-    assert.match(parsed.systemMessage, /Chinese to Japanese/);
+    assert.match(parsed.systemMessage, /Japanese prompt feedback/);
     assert.match(parsed.systemMessage, /このエラーの説明/);
   } finally {
     await server.close();
