@@ -231,7 +231,7 @@ async function callChatCompletions(config, messages) {
         model: config.model,
         messages,
         temperature: 0.2,
-        max_tokens: 500
+        max_tokens: 4096
       }),
       signal: controller.signal
     });
