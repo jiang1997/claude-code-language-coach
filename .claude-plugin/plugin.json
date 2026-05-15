@@ -52,8 +52,8 @@
     },
     "target_language": {
       "type": "string",
-      "title": "Target language (default: English)",
-      "description": "The language to translate prompts into or check grammar against.",
+      "title": "Target language",
+      "description": "The language to translate prompts into or check grammar against. Default is English.",
       "default": "English"
     }
   }
