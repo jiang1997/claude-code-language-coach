@@ -250,7 +250,9 @@ async function callChatCompletions(config, messages) {
 
     const content = parsed?.choices?.[0]?.message?.content;
     if (typeof content !== "string" || !content.trim()) {
-      throw new Error("provider response did not include choices[0].message.content");
+      throw new Error(
+        `provider response missing content. choices[0].message=${JSON.stringify(parsed?.choices?.[0]?.message)} body=${truncate(body, 800)}`
+      );
     }
 
     return content.trim();
