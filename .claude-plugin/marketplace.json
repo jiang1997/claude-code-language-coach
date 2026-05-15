@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "language-learning",
-  "description": "Language learning plugin for Claude Code — analyze English prompts and translate Chinese to English.",
+  "description": "Language learning plugin for Claude Code — analyze prompts and translate between languages.",
   "owner": {
     "name": "jieke"
   },
