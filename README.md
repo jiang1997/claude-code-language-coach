@@ -35,6 +35,10 @@ export LC_HELPER_MODEL="gpt-4o-mini"
 
 The script also recognizes `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_API_BASE`, and `OPENAI_MODEL`.
 
+## Prerequisites
+
+- Node.js 18 or later (the hook uses the global `fetch` API)
+
 ## Install
 
 Add the marketplace from GitHub and install the plugin:

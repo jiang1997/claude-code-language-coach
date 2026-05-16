@@ -11,6 +11,8 @@ const OUTPUT_LIMIT = 9500;
 
 const env = process.env;
 
+checkNodeVersion();
+
 main().catch((error) => {
   emitSystemMessage(`Language Coach hook failed: ${formatError(error)}`);
 });
@@ -308,4 +310,14 @@ function truncate(value, maxLength) {
   }
 
   return `${text.slice(0, maxLength - 20)}\n\n[truncated]`;
+}
+
+function checkNodeVersion() {
+  const major = Number(process.versions.node.split(".")[0]);
+  if (major < 18) {
+    process.stderr.write(
+      `Language Coach hook requires Node.js 18 or later. Current version: ${process.versions.node}\n`
+    );
+    process.exit(1);
+  }
 }
