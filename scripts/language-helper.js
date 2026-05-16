@@ -248,7 +248,8 @@ async function callChatCompletions(config, messages) {
 
     const body = await response.text();
     if (!response.ok) {
-      throw new Error(`provider returned HTTP ${response.status}: ${truncate(body, 500)}`);
+      const debugBody = env.LC_HELPER_DEBUG === "1" ? `: ${truncate(body, 500)}` : "";
+      throw new Error(`provider returned HTTP ${response.status}${debugBody}`);
     }
 
     let parsed;
@@ -260,8 +261,9 @@ async function callChatCompletions(config, messages) {
 
     const content = parsed?.choices?.[0]?.message?.content;
     if (typeof content !== "string" || !content.trim()) {
+      const debugBody = env.LC_HELPER_DEBUG === "1" ? ` body=${truncate(body, 800)}` : "";
       throw new Error(
-        `provider response missing content. choices[0].message=${JSON.stringify(parsed?.choices?.[0]?.message)} body=${truncate(body, 800)}`
+        `provider response missing content. choices[0].message=${JSON.stringify(parsed?.choices?.[0]?.message)}${debugBody}`
       );
     }
 
@@ -307,6 +309,11 @@ function emitSystemMessage(message, options = {}) {
 function formatError(error) {
   if (error?.name === "AbortError") {
     return "external model request timed out";
+  }
+
+  const code = error?.cause?.code;
+  if (code) {
+    return `${error.message} (${code})`;
   }
 
   return error?.message || String(error);
