@@ -315,9 +315,9 @@ function truncate(value, maxLength) {
 function checkNodeVersion() {
   const major = Number(process.versions.node.split(".")[0]);
   if (major < 18) {
-    process.stderr.write(
-      `Language Coach hook requires Node.js 18 or later. Current version: ${process.versions.node}\n`
+    emitSystemMessage(
+      `Language Coach hook requires Node.js 18 or later. Current version: ${process.versions.node}`
     );
-    process.exit(1);
+    process.exit(0);
   }
 }
