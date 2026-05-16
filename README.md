@@ -21,7 +21,7 @@ When enabling the plugin, Claude Code prompts for:
 - `base_url`: provider base URL, for example `https://api.openai.com/v1`
 - `model`: model name accepted by that provider
 - `inject_context`: default `false`; keep this off if you do not want feedback added to Claude context
-- `timeout_ms`: request timeout, default `12000`
+- `timeout_ms`: request timeout, default `60000`
 - `max_prompt_chars`: skip prompts longer than this, default `4000`
 - `target_language`: the language to translate into or check against, default `English`
 
