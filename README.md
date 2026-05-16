@@ -41,17 +41,11 @@ The script also recognizes `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_API_BASE
 
 ## Install
 
-Add the marketplace from GitHub and install the plugin:
-
-```sh
-claude plugin marketplace add https://github.com/jiang1997/claude-code-language-coach
-claude plugin install language-coach@language-coach
-```
-
-Then enable it inside Claude Code:
+Inside Claude Code, add the marketplace and install the plugin:
 
 ```text
-/plugin
+/plugin marketplace add jiang1997/claude-code-language-coach
+/plugin install language-coach@language-coach
 ```
 
 ## Privacy
