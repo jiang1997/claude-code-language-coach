@@ -28,12 +28,12 @@ When enabling the plugin, Claude Code prompts for:
 For local development or non-interactive testing, the hook also accepts environment variables:
 
 ```sh
-export LL_HELPER_API_KEY="..."
-export LL_HELPER_BASE_URL="https://api.openai.com/v1"
-export LL_HELPER_MODEL="gpt-4o-mini"
+export LC_HELPER_API_KEY="..."
+export LC_HELPER_BASE_URL="https://api.openai.com/v1"
+export LC_HELPER_MODEL="gpt-4o-mini"
 ```
 
-The script also recognizes `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_API_BASE`, `OPENAI_MODEL`, and `DASHSCOPE_API_KEY`.
+The script also recognizes `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_API_BASE`, and `OPENAI_MODEL`.
 
 ## Install
 

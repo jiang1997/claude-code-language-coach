@@ -37,14 +37,14 @@ async function main() {
 
   if (!config.apiKey) {
     emitSystemMessage(
-      "Language Coach plugin is not configured: set the plugin API key or LL_HELPER_API_KEY."
+      "Language Coach plugin is not configured: set the plugin API key or LC_HELPER_API_KEY."
     );
     return;
   }
 
   if (!config.model) {
     emitSystemMessage(
-      "Language Coach plugin is not configured: set the plugin model or LL_HELPER_MODEL."
+      "Language Coach plugin is not configured: set the plugin model or LC_HELPER_MODEL."
     );
     return;
   }
@@ -95,7 +95,7 @@ function shouldHandlePrompt(prompt) {
   }
 
   if (
-    readBoolean("skip_slash_commands", "LL_HELPER_SKIP_SLASH_COMMANDS", true) &&
+    readBoolean("skip_slash_commands", "LC_HELPER_SKIP_SLASH_COMMANDS", true) &&
     prompt.startsWith("/")
   ) {
     return false;
@@ -110,36 +110,35 @@ function shouldHandlePrompt(prompt) {
 
 function readConfig() {
   return {
-    enabled: readBoolean("enabled", "LL_HELPER_ENABLED", true),
+    enabled: readBoolean("enabled", "LC_HELPER_ENABLED", true),
     apiKey:
       readPluginOption("api_key") ||
-      env.LL_HELPER_API_KEY ||
+      env.LC_HELPER_API_KEY ||
       env.OPENAI_API_KEY ||
-      env.DASHSCOPE_API_KEY ||
       "",
     baseUrl:
       readPluginOption("base_url") ||
-      env.LL_HELPER_BASE_URL ||
+      env.LC_HELPER_BASE_URL ||
       env.OPENAI_BASE_URL ||
       env.OPENAI_API_BASE ||
       DEFAULT_BASE_URL,
     model:
       readPluginOption("model") ||
-      env.LL_HELPER_MODEL ||
+      env.LC_HELPER_MODEL ||
       env.OPENAI_MODEL ||
       DEFAULT_MODEL,
-    injectContext: readBoolean("inject_context", "LL_HELPER_INJECT_CONTEXT", false),
-    timeoutMs: readNumber("timeout_ms", "LL_HELPER_TIMEOUT_MS", DEFAULT_TIMEOUT_MS, 1000, 60000),
+    injectContext: readBoolean("inject_context", "LC_HELPER_INJECT_CONTEXT", false),
+    timeoutMs: readNumber("timeout_ms", "LC_HELPER_TIMEOUT_MS", DEFAULT_TIMEOUT_MS, 1000, 60000),
     maxPromptChars: readNumber(
       "max_prompt_chars",
-      "LL_HELPER_MAX_PROMPT_CHARS",
+      "LC_HELPER_MAX_PROMPT_CHARS",
       DEFAULT_MAX_PROMPT_CHARS,
       100,
       20000
     ),
     targetLanguage:
       readPluginOption("target_language") ||
-      env.LL_HELPER_TARGET_LANGUAGE ||
+      env.LC_HELPER_TARGET_LANGUAGE ||
       DEFAULT_TARGET_LANGUAGE
   };
 }
