@@ -128,7 +128,7 @@ function readConfig() {
       env.OPENAI_MODEL ||
       DEFAULT_MODEL,
     injectContext: readBoolean("inject_context", "LC_HELPER_INJECT_CONTEXT", false),
-    timeoutMs: readNumber("timeout_ms", "LC_HELPER_TIMEOUT_MS", DEFAULT_TIMEOUT_MS, 1000, 60000),
+    timeoutMs: readNumber("timeout_ms", "LC_HELPER_TIMEOUT_MS", DEFAULT_TIMEOUT_MS, 1000, 300000),
     maxPromptChars: readNumber(
       "max_prompt_chars",
       "LC_HELPER_MAX_PROMPT_CHARS",
