@@ -28,12 +28,6 @@
       "default": "gpt-4o-mini",
       "required": true
     },
-    "inject_context": {
-      "type": "boolean",
-      "title": "Inject suggestions into Claude context",
-      "description": "When false, suggestions are only shown to you as a system message and do not enter Claude's context.",
-      "default": false
-    },
     "timeout_ms": {
       "type": "number",
       "title": "API timeout in milliseconds",

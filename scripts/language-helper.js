@@ -53,10 +53,7 @@ async function main() {
 
   const content = await callChatCompletions(config, buildMessages(prompt, config.targetLanguage));
   const message = formatFeedback(content, config.targetLanguage);
-  emitSystemMessage(message, {
-    injectContext: config.injectContext,
-    hookEventName: input.hook_event_name
-  });
+  emitSystemMessage(message);
 }
 
 function readStdin() {
@@ -129,7 +126,6 @@ function readConfig() {
       env.LC_HELPER_MODEL ||
       env.OPENAI_MODEL ||
       DEFAULT_MODEL,
-    injectContext: readBoolean("inject_context", "LC_HELPER_INJECT_CONTEXT", false),
     timeoutMs: readNumber("timeout_ms", "LC_HELPER_TIMEOUT_MS", DEFAULT_TIMEOUT_MS, 1000, 300000),
     maxPromptChars: readNumber(
       "max_prompt_chars",
@@ -291,21 +287,11 @@ function formatFeedback(content, targetLanguage) {
   return truncate(`Language Coach (${target} prompt feedback)\n\n${content}`, OUTPUT_LIMIT);
 }
 
-function emitSystemMessage(message, options = {}) {
+function emitSystemMessage(message) {
   const output = {
     systemMessage: truncate(message, OUTPUT_LIMIT),
     suppressOutput: true
   };
-
-  if (options.injectContext) {
-    output.hookSpecificOutput = {
-      hookEventName: options.hookEventName || "UserPromptSubmit",
-      additionalContext: truncate(
-        `Language helper feedback for the submitted prompt:\n\n${message}`,
-        OUTPUT_LIMIT
-      )
-    };
-  }
 
   process.stdout.write(`${JSON.stringify(output)}\n`);
 }
