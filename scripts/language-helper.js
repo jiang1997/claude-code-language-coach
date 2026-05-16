@@ -164,12 +164,16 @@ function readBoolean(optionKey, envKey, defaultValue) {
 
 function readNumber(optionKey, envKey, defaultValue, min, max) {
   const raw = readPluginOption(optionKey) || env[envKey];
+  if (raw === undefined || raw === "") {
+    return defaultValue;
+  }
+
   const parsed = Number(raw);
   if (!Number.isFinite(parsed)) {
     return defaultValue;
   }
 
-  return Math.min(max, Math.max(min, parsed));
+  return Math.min(max, Math.max(min, Math.trunc(parsed)));
 }
 
 function looksLikeMostlyCodeOrLogs(prompt) {
