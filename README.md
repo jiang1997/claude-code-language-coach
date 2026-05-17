@@ -5,13 +5,16 @@ This Claude Code plugin gives prompt-level language feedback before Claude proce
 - If your prompt is already in your chosen target language, it checks grammar and suggests a more natural version.
 - If your prompt is in another language, it translates it into a concise Claude Code prompt in your chosen target language.
 
-Feedback is shown through a hook `systemMessage`. The suggestions are visible in Claude Code but are not inserted into Claude's model context.
+Feedback is shown through a hook `systemMessage`. **The suggestions are visible in Claude Code but are not inserted into Claude's model context.**
 
-## Files
+## Install
 
-- `.claude-plugin/plugin.json`: plugin metadata and user configuration
-- `hooks/hooks.json`: `UserPromptSubmit` hook registration
-- `scripts/language-helper.js`: OpenAI-compatible API client and language feedback logic
+Inside Claude Code, add the marketplace and install the plugin:
+
+```text
+/plugin marketplace add jiang1997/claude-code-language-coach
+/plugin install language-coach@language-coach
+```
 
 ## Configure
 
@@ -37,15 +40,6 @@ The script also recognizes `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_API_BASE
 ## Prerequisites
 
 - Node.js 18 or later (the hook uses the global `fetch` API)
-
-## Install
-
-Inside Claude Code, add the marketplace and install the plugin:
-
-```text
-/plugin marketplace add jiang1997/claude-code-language-coach
-/plugin install language-coach@language-coach
-```
 
 ## Privacy
 
