@@ -20,11 +20,14 @@ Inside Claude Code, add the marketplace and install the plugin:
 
 ## Configure
 
-When enabling the plugin, Claude Code prompts for:
+When enabling the plugin, Claude Code prompts for the required settings:
 
 - `api_key`: API key for your OpenAI-compatible provider
 - `base_url`: provider base URL, for example `https://api.openai.com/v1`
 - `model`: model name accepted by that provider
+
+After installation, open the plugin manager (`/plugin` → Installed → Language Coach) to adjust these optional settings:
+
 - `timeout_ms`: request timeout, default `60000`
 - `max_prompt_chars`: skip prompts longer than this, default `4000`
 - `target_language`: the language to translate into or check against, default `English`

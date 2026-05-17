@@ -20,11 +20,14 @@
 
 ## 配置
 
-启用插件时，Claude Code 会提示你填写以下配置：
+启用插件时，Claude Code 会提示你填写必填项：
 
 - `api_key`：兼容 OpenAI 接口的 API 密钥
 - `base_url`：服务商的 base URL，例如 `https://api.openai.com/v1`
 - `model`：该服务商支持的模型名称
+
+安装完成后，可以在插件管理器（`/plugin` → Installed → Language Coach）中调整以下可选配置：
+
 - `timeout_ms`：请求超时时间，默认 `60000`
 - `max_prompt_chars`：超过此长度的提示词会被跳过，默认 `4000`
 - `target_language`：目标语言，用于翻译或语法检查，默认 `English`
