@@ -49,6 +49,12 @@
       "title": "Target language",
       "description": "The language to translate prompts into or check grammar against. Default is English.",
       "default": "English"
+    },
+    "source_language": {
+      "type": "string",
+      "title": "Source language (optional)",
+      "description": "Your native or source language. When set, the tutor produces a back-translation into this language whenever you write a prompt in another language, letting you verify your wording matches your intent. Leave empty to disable.",
+      "default": ""
     }
   }
 }

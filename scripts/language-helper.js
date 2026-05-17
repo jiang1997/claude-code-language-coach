@@ -7,6 +7,7 @@ const DEFAULT_MODEL = "gpt-4o-mini";
 const DEFAULT_TIMEOUT_MS = 60000;
 const DEFAULT_MAX_PROMPT_CHARS = 4000;
 const DEFAULT_TARGET_LANGUAGE = "English";
+const DEFAULT_SOURCE_LANGUAGE = "";
 const OUTPUT_LIMIT = 9500;
 
 const env = process.env;
@@ -51,7 +52,7 @@ async function main() {
     return;
   }
 
-  const content = await callChatCompletions(config, buildMessages(prompt, config.targetLanguage));
+  const content = await callChatCompletions(config, buildMessages(prompt, config.targetLanguage, config.sourceLanguage));
   const message = formatFeedback(content, config.targetLanguage);
   emitSystemMessage(message);
 }
@@ -137,7 +138,11 @@ function readConfig() {
     targetLanguage:
       readPluginOption("target_language") ||
       env.LC_HELPER_TARGET_LANGUAGE ||
-      DEFAULT_TARGET_LANGUAGE
+      DEFAULT_TARGET_LANGUAGE,
+    sourceLanguage:
+      readPluginOption("source_language") ||
+      env.LC_HELPER_SOURCE_LANGUAGE ||
+      DEFAULT_SOURCE_LANGUAGE
   };
 }
 
@@ -191,8 +196,13 @@ function looksLikeMostlyCodeOrLogs(prompt) {
   return codeishLines.length / lines.length >= 0.45;
 }
 
-function buildMessages(prompt, targetLanguage) {
+function buildMessages(prompt, targetLanguage, sourceLanguage) {
   const target = targetLanguage || DEFAULT_TARGET_LANGUAGE;
+  const source = sourceLanguage || "";
+
+  const sourceBullet = source
+    ? [`- Source: if the submitted prompt contains any content not in ${source}, include a polished ${source} version so the user can verify their intent matches the wording. Omit this bullet if the prompt is fully in ${source}.`]
+    : [];
 
   return [
     {
@@ -213,6 +223,7 @@ function buildMessages(prompt, targetLanguage) {
         "Output Markdown only.",
         "Use this structure exactly:",
         `- Improved: one polished version of the prompt in ${target}.`,
+        ...sourceBullet,
         "- Notes: up to three short bullets explaining grammar, word choice, or translation choices.",
         `If the original prompt is already natural ${target}, say so in Notes and keep Improved nearly identical.`
       ].join("\n")

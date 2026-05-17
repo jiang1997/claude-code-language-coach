@@ -26,6 +26,7 @@ When enabling the plugin, Claude Code prompts for:
 - `timeout_ms`: request timeout, default `60000`
 - `max_prompt_chars`: skip prompts longer than this, default `4000`
 - `target_language`: the language to translate into or check against, default `English`
+- `source_language`: optional native/source language. When set, the tutor adds a back-translation into this language when your prompt is written in another language, default empty
 
 For local development or non-interactive testing, the hook also accepts environment variables:
 
