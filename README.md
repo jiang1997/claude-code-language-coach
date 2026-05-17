@@ -1,3 +1,5 @@
+**English** | [简体中文](./README.zh-CN.md)
+
 # Claude Code Language Coach Plugin
 
 This Claude Code plugin gives prompt-level language feedback before Claude processes your message.
