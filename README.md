@@ -9,6 +9,8 @@ This Claude Code plugin gives prompt-level language feedback before Claude proce
 
 Feedback is shown through a hook `systemMessage`. **The suggestions are visible in Claude Code but are not inserted into Claude's model context.**
 
+![Screenshot of Language Coach in Claude Code](./assets/screenshot.png)
+
 ## Install
 
 Inside Claude Code, add the marketplace and install the plugin:

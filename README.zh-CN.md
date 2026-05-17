@@ -9,6 +9,8 @@
 
 反馈会通过 hook 的 `systemMessage` 显示。**这些建议在 Claude Code 中可见，但不会注入到 Claude 的上下文里。**
 
+![Language Coach 在 Claude Code 中的截图](./assets/screenshot.png)
+
 ## 安装
 
 在 Claude Code 中添加 marketplace 并安装插件：
