@@ -52,3 +52,7 @@ The script also recognizes `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `OPENAI_API_BASE
 ## Privacy
 
 This hook sends each handled prompt to the configured external model provider before Claude processes it. Prompts that look like long code blocks or logs are skipped, but you should still avoid using the plugin with sensitive prompts unless you trust the configured provider.
+
+## Friend Link
+
+- [LINUX DO](https://linux.do/)
