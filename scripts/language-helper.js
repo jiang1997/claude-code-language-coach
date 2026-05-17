@@ -201,7 +201,7 @@ function buildMessages(prompt, targetLanguage, sourceLanguage) {
   const source = sourceLanguage || "";
 
   const sourceBullet = source
-    ? [`- Source: if the submitted prompt contains any content not in ${source}, include a polished ${source} version so the user can verify their intent matches the wording. Omit this bullet if the prompt is fully in ${source}.`]
+    ? [`- Source: if the submitted prompt contains any content not in ${source}, include a polished ${source} version so the user can verify their intent matches the wording. Omit this bullet if the submitted prompt is fully in ${source}.`]
     : [];
 
   return [
@@ -222,10 +222,10 @@ function buildMessages(prompt, targetLanguage, sourceLanguage) {
         "",
         "Output Markdown only.",
         "Use this structure exactly:",
-        `- Improved: one polished version of the prompt in ${target}.`,
+        `- Improved: one polished version of the submitted prompt in ${target}.`,
         ...sourceBullet,
         "- Notes: up to three short bullets explaining grammar, word choice, or translation choices.",
-        `If the original prompt is already natural ${target}, say so in Notes and keep Improved nearly identical.`
+        `If the submitted prompt is already natural ${target}, say so in Notes and keep Improved nearly identical.`
       ].join("\n")
     },
     {
