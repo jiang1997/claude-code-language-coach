@@ -206,6 +206,7 @@ function buildMessages(prompt, targetLanguage, sourceLanguage) {
         "Use this structure exactly:",
         "",
         `- Improved: one polished version of the submitted prompt in ${target}.`,
+        `- Alternative: another natural ${target} way to express the same intent, using different wording or sentence structure. Keep it concise and native-sounding.`,
         `- Source: one polished ${source} version of the submitted prompt so the user can verify their intent.`,
         "- Notes: up to three short bullets explaining grammar, word choice, or translation choices.",
         "",
@@ -216,6 +217,7 @@ function buildMessages(prompt, targetLanguage, sourceLanguage) {
         "Use this structure exactly:",
         "",
         `- Improved: one polished version of the submitted prompt in ${target}.`,
+        `- Alternative: another natural ${target} way to express the same intent, using different wording or sentence structure. Keep it concise and native-sounding.`,
         "- Notes: up to three short bullets explaining grammar, word choice, or translation choices.",
         "",
         `If the submitted prompt is already natural ${target}, say so in Notes and keep Improved nearly identical.`
