@@ -203,15 +203,10 @@ function buildMessages(prompt, targetLanguage, sourceLanguage) {
   const formatSection = source
     ? [
         "Output Markdown only.",
-        `If the submitted prompt contains any non-${source} text, use exactly this structure:`,
+        "Use this structure exactly:",
         "",
         `- Improved: one polished version of the submitted prompt in ${target}.`,
         `- Source: one polished ${source} version of the submitted prompt so the user can verify their intent.`,
-        "- Notes: up to three short bullets explaining grammar, word choice, or translation choices.",
-        "",
-        `If the submitted prompt is fully ${source}, use exactly this structure:`,
-        "",
-        `- Improved: one polished version of the submitted prompt in ${target}.`,
         "- Notes: up to three short bullets explaining grammar, word choice, or translation choices.",
         "",
         `If the submitted prompt is already natural ${target}, say so in Notes and keep Improved nearly identical.`
@@ -219,8 +214,10 @@ function buildMessages(prompt, targetLanguage, sourceLanguage) {
     : [
         "Output Markdown only.",
         "Use this structure exactly:",
+        "",
         `- Improved: one polished version of the submitted prompt in ${target}.`,
         "- Notes: up to three short bullets explaining grammar, word choice, or translation choices.",
+        "",
         `If the submitted prompt is already natural ${target}, say so in Notes and keep Improved nearly identical.`
       ];
 
