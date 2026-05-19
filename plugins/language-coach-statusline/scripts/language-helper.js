@@ -347,8 +347,29 @@ function writeFeedbackCache(sessionId, message) {
     const filePath = path.join(CACHE_DIR, `${sessionId}.txt`);
     const payload = `${new Date().toISOString()}\n${message}\n`;
     fs.writeFileSync(filePath, payload, "utf8");
+    cleanStaleCacheFiles();
   } catch (err) {
     process.stderr.write(`language-coach: cache write failed: ${err.message}\n`);
+  }
+}
+
+function cleanStaleCacheFiles() {
+  try {
+    const entries = fs.readdirSync(CACHE_DIR);
+    const cutoff = Date.now() - MAX_AGE_MS;
+    for (const entry of entries) {
+      const filePath = path.join(CACHE_DIR, entry);
+      try {
+        const stats = fs.statSync(filePath);
+        if (stats.mtimeMs < cutoff) {
+          fs.unlinkSync(filePath);
+        }
+      } catch (_err) {
+        // Ignore per-file errors (e.g., race condition with another process).
+      }
+    }
+  } catch (_err) {
+    // Ignore directory-level errors (e.g., directory missing or unreadable).
   }
 }
 
