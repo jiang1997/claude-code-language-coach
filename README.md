@@ -19,6 +19,8 @@ This repository contains two versions of the Language Coach plugin for Claude Co
 ### 1. [Language Coach (Original)](./plugins/language-coach) (Recommended)
 The classic version that provides blocking, inline feedback before each prompt.
 
+![Screenshot of Original Language Coach](./assets/screenshot-origin.png)
+
 **Install:**
 ```text
 /plugin marketplace add jiang1997/claude-code-language-coach
@@ -27,6 +29,8 @@ The classic version that provides blocking, inline feedback before each prompt.
 
 ### 2. [Language Coach Statusline](./plugins/language-coach-statusline)
 The non-blocking version that provides feedback in the CLI status line.
+
+![Screenshot of Statusline Language Coach](./assets/screenshot-statusline.png)
 
 **Install:**
 ```text

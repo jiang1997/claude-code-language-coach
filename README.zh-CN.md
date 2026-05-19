@@ -19,6 +19,8 @@
 ### 1. [语言教练 (原版)](./plugins/language-coach) （推荐使用）
 经典版本，在每个 Prompt 提交前提供阻塞式的内联反馈。
 
+![原版插件截图](./assets/screenshot-origin.png)
+
 **安装命令：**
 ```text
 /plugin marketplace add jiang1997/claude-code-language-coach
@@ -27,6 +29,8 @@
 
 ### 2. [语言教练 状态栏版](./plugins/language-coach-statusline)
 非阻塞版本，通过 CLI 状态栏提供异步反馈。
+
+![状态栏版插件截图](./assets/screenshot-statusline.png)
 
 **安装命令：**
 ```text
