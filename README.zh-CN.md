@@ -21,22 +21,34 @@
 
 ![原版插件截图](./assets/screenshot-origin.png)
 
-**安装命令：**
-```text
-/plugin marketplace add jiang1997/claude-code-language-coach
-/plugin install language-coach@language-coach
-```
+**安装步骤：**
+
+1. 添加应用市场：
+   ```text
+   /plugin marketplace add jiang1997/claude-code-language-coach
+   ```
+
+2. 安装插件：
+   ```text
+   /plugin install language-coach@language-coach
+   ```
 
 ### 2. [语言教练 状态栏版](./plugins/language-coach-statusline)
 非阻塞版本，通过 CLI 状态栏提供异步反馈。
 
 ![状态栏版插件截图](./assets/screenshot-statusline.png)
 
-**安装命令：**
-```text
-/plugin marketplace add jiang1997/claude-code-language-coach
-/plugin install language-coach-statusline@language-coach
-```
+**安装步骤：**
+
+1. 添加应用市场：
+   ```text
+   /plugin marketplace add jiang1997/claude-code-language-coach
+   ```
+
+2. 安装插件：
+   ```text
+   /plugin install language-coach-statusline@language-coach
+   ```
 
 **必要配置：**
 安装后，你 **必须** 手动修改 `~/.claude/settings.json` 以启用状态栏显示：

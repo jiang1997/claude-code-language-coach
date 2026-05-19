@@ -22,10 +22,16 @@ The classic version that provides blocking, inline feedback before each prompt.
 ![Screenshot of Original Language Coach](./assets/screenshot-origin.png)
 
 **Install:**
-```text
-/plugin marketplace add jiang1997/claude-code-language-coach
-/plugin install language-coach@language-coach
-```
+
+1. Add the marketplace:
+   ```text
+   /plugin marketplace add jiang1997/claude-code-language-coach
+   ```
+
+2. Install the plugin:
+   ```text
+   /plugin install language-coach@language-coach
+   ```
 
 ### 2. [Language Coach Statusline](./plugins/language-coach-statusline)
 The non-blocking version that provides feedback in the CLI status line.
@@ -33,10 +39,16 @@ The non-blocking version that provides feedback in the CLI status line.
 ![Screenshot of Statusline Language Coach](./assets/screenshot-statusline.png)
 
 **Install:**
-```text
-/plugin marketplace add jiang1997/claude-code-language-coach
-/plugin install language-coach-statusline@language-coach
-```
+
+1. Add the marketplace:
+   ```text
+   /plugin marketplace add jiang1997/claude-code-language-coach
+   ```
+
+2. Install the plugin:
+   ```text
+   /plugin install language-coach-statusline@language-coach
+   ```
 
 **Mandatory Setup:**
 To see the feedback, you **must** add a `statusLine` entry to your `~/.claude/settings.json`:
