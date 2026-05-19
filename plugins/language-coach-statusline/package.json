@@ -1,0 +1,23 @@
+{
+  "name": "language-coach-statusline",
+  "version": "0.4.0",
+  "description": "Claude Code plugin that shows grammar suggestions and translates prompts into a configurable target language.",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "lint": "eslint scripts/",
+    "test": "node --test"
+  },
+  "keywords": [
+    "claude-code",
+    "plugin",
+    "language-learning",
+    "translation"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jiang1997/claude-code-language-coach.git"
+  }
+}

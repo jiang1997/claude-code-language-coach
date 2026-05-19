@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "language-coach-statusline",
+  "version": "0.4.0",
+  "description": "Shows grammar suggestions and translates prompts into a configurable target language.",
+  "author": {
+    "name": "local"
+  },
+  "userConfig": {
+    "api_key": {
+      "type": "string",
+      "title": "OpenAI-compatible API key",
+      "description": "API key for the external model provider used to evaluate or translate prompts.",
+      "sensitive": true,
+      "required": true
+    },
+    "base_url": {
+      "type": "string",
+      "title": "OpenAI-compatible base URL",
+      "description": "Base URL for the provider, such as https://api.openai.com/v1 or another OpenAI-compatible endpoint.",
+      "default": "https://api.openai.com/v1",
+      "required": true
+    },
+    "model": {
+      "type": "string",
+      "title": "Model",
+      "description": "Model name accepted by the configured OpenAI-compatible provider.",
+      "default": "gpt-4o-mini",
+      "required": true
+    },
+    "timeout_ms": {
+      "type": "number",
+      "title": "API timeout in milliseconds",
+      "description": "Maximum time to wait for the external model before letting the prompt continue without feedback.",
+      "default": 60000,
+      "min": 1000,
+      "max": 300000
+    },
+    "max_prompt_chars": {
+      "type": "number",
+      "title": "Maximum prompt characters",
+      "description": "Prompts longer than this are skipped to avoid sending large code blocks or logs to the external provider.",
+      "default": 4000,
+      "min": 100,
+      "max": 20000
+    },
+    "target_language": {
+      "type": "string",
+      "title": "Target language",
+      "description": "The language to translate prompts into or check grammar against. Default is English.",
+      "default": "English"
+    },
+    "source_language": {
+      "type": "string",
+      "title": "Source language (optional)",
+      "description": "Your native or source language. When set, the tutor produces a back-translation into this language whenever you write a prompt in another language, letting you verify your wording matches your intent. Leave empty to disable.",
+      "default": ""
+    }
+  }
+}

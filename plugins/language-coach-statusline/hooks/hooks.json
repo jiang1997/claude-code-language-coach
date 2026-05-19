@@ -1,0 +1,17 @@
+{
+  "description": "Language coach feedback before each user prompt",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/language-helper.js\"",
+            "timeout": 305,
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}

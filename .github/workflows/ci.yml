@@ -17,8 +17,15 @@ jobs:
         with:
           node-version: 18
 
-      - name: Syntax check
-        run: node --check scripts/language-helper.js
+      - name: Syntax check original version
+        run: node --check plugins/language-coach/scripts/language-helper.js
+
+      - name: Syntax check statusline version
+        run: |
+          node --check plugins/language-coach-statusline/scripts/language-helper.js
+          node --check plugins/language-coach-statusline/scripts/language-statusline.js
 
       - name: Run tests
-        run: node --test
+        run: |
+          cd plugins/language-coach && node --test
+          cd ../language-coach-statusline && node --test

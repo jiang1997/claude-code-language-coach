@@ -1,21 +1,26 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "language-coach",
-  "description": "Language learning plugin for Claude Code — analyze prompts and translate between languages.",
+  "description": "Language Coach plugins for Claude Code",
   "owner": {
-    "name": "jieke"
+    "name": "jiang1997"
   },
   "plugins": [
     {
       "name": "language-coach",
-      "description": "Shows English grammar suggestions or Chinese-to-English translations for prompts before Claude Code processes them.",
-      "author": {
-        "name": "jieke"
-      },
+      "description": "Original blocking version with inline feedback.",
       "source": {
-        "source": "url",
+        "source": "git-subdir",
         "url": "https://github.com/jiang1997/claude-code-language-coach.git",
-        "ref": "master"
+        "path": "plugins/language-coach"
+      }
+    },
+    {
+      "name": "language-coach-statusline",
+      "description": "Non-blocking version with CLI status line feedback.",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/jiang1997/claude-code-language-coach.git",
+        "path": "plugins/language-coach-statusline"
       }
     }
   ]
