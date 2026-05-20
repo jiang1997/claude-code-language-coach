@@ -18,11 +18,15 @@ jobs:
           node-version: 18
 
       - name: Syntax check original version
-        run: node --check plugins/language-coach/scripts/language-helper.js
+        run: |
+          node --check plugins/language-coach/scripts/language-helper.js
+          node --check plugins/language-coach/scripts/language-core.js
 
       - name: Syntax check statusline version
         run: |
           node --check plugins/language-coach-statusline/scripts/language-helper.js
+          node --check plugins/language-coach-statusline/scripts/language-core.js
+          node --check plugins/language-coach-statusline/scripts/statusline-cache.js
           node --check plugins/language-coach-statusline/scripts/language-statusline.js
 
       - name: Run tests

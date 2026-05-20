@@ -3,14 +3,15 @@
 "use strict";
 
 const fs = require("fs");
-const os = require("os");
-const path = require("path");
 
-const CACHE_DIR = path.join(os.tmpdir(), "claude-language-coach");
-const MAX_AGE_MS = 5 * 60 * 1000;
+const {
+  MAX_AGE_MS,
+  feedbackCachePath,
+  sanitizeSessionId
+} = require("./statusline-cache");
+
 const MAX_OUTPUT_LINES = 6;
 const MAX_LINE_CHARS = 240;
-const HEADER = "\x1b[2mLanguage Coach\x1b[0m";
 
 readStdin()
   .then(render)
@@ -23,7 +24,7 @@ async function render(raw) {
     return;
   }
 
-  const file = path.join(CACHE_DIR, `${sessionId}.txt`);
+  const file = feedbackCachePath(sessionId);
   let content;
   try {
     content = fs.readFileSync(file, "utf8");
@@ -99,14 +100,6 @@ function safeParse(raw) {
   } catch (_err) {
     return {};
   }
-}
-
-function sanitizeSessionId(value) {
-  if (typeof value !== "string") {
-    return "";
-  }
-
-  return value.replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 64);
 }
 
 function truncate(value, maxLength) {
