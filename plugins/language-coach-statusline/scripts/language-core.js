@@ -63,7 +63,7 @@ async function main(options, emitSystemMessage, setContext) {
   }
 
   const content = await callChatCompletions(config, buildMessages(prompt, config.targetLanguage, config.sourceLanguage));
-  const message = formatFeedback(content, config.targetLanguage);
+  const message = formatFeedback(content, config.targetLanguage, config.sourceLanguage);
   emitSystemMessage(message, context);
 }
 
@@ -316,9 +316,11 @@ function chatCompletionsUrl(baseUrl) {
   return `${trimmed}/chat/completions`;
 }
 
-function formatFeedback(content, targetLanguage) {
+function formatFeedback(content, targetLanguage, sourceLanguage) {
   const target = targetLanguage || DEFAULT_TARGET_LANGUAGE;
-  return truncate(`Language Coach (${target} prompt feedback)\n\n${content}`, OUTPUT_LIMIT);
+  const source = sourceLanguage || "";
+  const label = source ? `${source} → ${target}` : target;
+  return truncate(`Language Coach (${label})\n\n${content}`, OUTPUT_LIMIT);
 }
 
 function defaultEmitSystemMessage(message) {

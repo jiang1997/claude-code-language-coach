@@ -47,7 +47,7 @@ test("statusline renderer reads cached feedback by sanitized session id", () => 
   fs.mkdirSync(path.dirname(cachePath), { recursive: true });
   fs.writeFileSync(
     cachePath,
-    `${new Date().toISOString()}\nLanguage Coach (English prompt feedback)\n\n- Improved: Please improve this prompt.\n- Notes: clearer wording\n`,
+    `${new Date().toISOString()}\nLanguage Coach (English)\n\n- Improved: Please improve this prompt.\n- Notes: clearer wording\n`,
     "utf8"
   );
 
