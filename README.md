@@ -2,6 +2,8 @@
 
 This repository contains two versions of the Language Coach plugin for Claude Code.
 
+Write Claude Code prompts in languages you're not fluent in — with grammar checks, translation, and back-translation to verify your intent.
+
 - If your prompt is already in your chosen target language, it checks grammar and suggests a more natural version.
 - If your prompt is in another language, it translates it into a concise Claude Code prompt in your chosen target language.
 
