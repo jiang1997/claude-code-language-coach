@@ -16,7 +16,7 @@
 | **呈现方式** | 聊天窗口内联系统消息 | CLI 状态栏 (页脚) |
 | **交互体验** | 轻微延迟 Claude 的回答 | Claude 立即回答 (后台运行) |
 | **可见度** | 显著，在 Claude 回复之前显示 | 细微，在 Claude 回复过程中/之后出现 |
-| **配置复杂度** | 零配置 (即装即用) | 需要手动修改 `settings.json` |
+| **配置复杂度** | 需配置 API 密钥和模型 | 需配置 API 密钥和模型，以及 `settings.json` |
 
 ## 插件列表
 
@@ -37,6 +37,11 @@
    /plugin install language-coach@language-coach
    ```
 
+3. **配置插件** — 打开插件管理器（`/plugin` → 已安装 → Language Coach）并设置：
+   - `api_key`: 你的 OpenAI 兼容 API 密钥
+   - `base_url`: 服务商地址（如 `https://api.openai.com/v1`）
+   - `model`: 服务商支持的模型名称
+
 ### 2. [语言教练 状态栏版](./plugins/language-coach-statusline)
 非阻塞版本，通过 CLI 状态栏提供异步反馈。
 
@@ -53,6 +58,8 @@
    ```text
    /plugin install language-coach-statusline@language-coach
    ```
+
+3. **配置插件** — API 设置与原版相同（`api_key`、`base_url`、`model`）。
 
 **必要配置：**
 安装后，你 **必须** 手动修改 `~/.claude/settings.json` 以启用状态栏显示：

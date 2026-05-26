@@ -18,7 +18,7 @@ Write Claude Code prompts in languages you're not fluent in — with grammar che
 | **Delivery** | Inline system message in chat | CLI Status Line (footer) |
 | **UX** | Delays Claude's response slightly | Instant response (runs in background) |
 | **Visibility** | Prominent, before Claude's reply | Subtle, appears during/after reply |
-| **Setup** | Zero-config (Plug & Play) | Requires manual `settings.json` edit |
+| **Setup** | Configure API key, base URL, and model | Configure API + manual `settings.json` edit |
 
 ## Plugins
 
@@ -39,6 +39,11 @@ The classic version that provides blocking, inline feedback before each prompt.
    /plugin install language-coach@language-coach
    ```
 
+3. **Configure** — open the plugin manager (`/plugin` → Installed → Language Coach) and set:
+   - `api_key`: Your OpenAI-compatible API key
+   - `base_url`: Provider base URL (e.g. `https://api.openai.com/v1`)
+   - `model`: Model name accepted by that provider
+
 ### 2. [Language Coach Statusline](./plugins/language-coach-statusline)
 The non-blocking version that provides feedback in the CLI status line.
 
@@ -55,6 +60,8 @@ The non-blocking version that provides feedback in the CLI status line.
    ```text
    /plugin install language-coach-statusline@language-coach
    ```
+
+3. **Configure** — same API settings as the Original version (`api_key`, `base_url`, `model`).
 
 **Mandatory Setup:**
 To see the feedback, you **must** add a `statusLine` entry to your `~/.claude/settings.json`:
