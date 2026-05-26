@@ -1,5 +1,7 @@
 # Claude Code 语言教练 多插件仓库
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 本仓库包含两个版本的 Claude Code 语言教练插件。
 
 用你不熟悉的语言编写 Claude Code 提示词——插件会帮你检查语法、翻译，并回译以确认意思无误。

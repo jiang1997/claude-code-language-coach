@@ -1,5 +1,7 @@
 # Claude Code Language Coach Monorepo
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 This repository contains two versions of the Language Coach plugin for Claude Code.
 
 Write Claude Code prompts in languages you're not fluent in — with grammar checks, translation, and back-translation to verify your intent.
