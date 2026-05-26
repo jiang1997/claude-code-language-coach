@@ -1,6 +1,6 @@
-# Claude Code Language Coach Monorepo
-
 [English](README.md) | [简体中文](README.zh-CN.md)
+
+# Claude Code Language Coach Monorepo
 
 This repository contains two versions of the Language Coach plugin for Claude Code.
 
