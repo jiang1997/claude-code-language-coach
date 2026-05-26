@@ -7,7 +7,7 @@ This Claude Code plugin gives prompt-level language feedback in the background.
 - If your prompt is already in your chosen target language, it checks grammar and suggests a more natural version.
 - If your prompt is in another language, it translates it into a concise Claude Code prompt in your chosen target language.
 
-**The plugin operates in non-blocking mode**: the feedback appears in your CLI status line a few seconds after you submit a prompt, rather than blocking Claude's response. The suggestions are visible in the status line but are not inserted into Claude's model context.
+**The plugin operates in non-blocking mode**: the feedback appears in your CLI status line a few seconds after you submit a prompt, rather than blocking Claude's response. **The plugin does not modify your input — the suggestions are visible only to you and are not inserted into Claude's model context.**
 
 ![Screenshot of Language Coach in Claude Code](./assets/screenshot.png)
 

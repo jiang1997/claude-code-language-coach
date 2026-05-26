@@ -7,6 +7,8 @@ Write Claude Code prompts in languages you're not fluent in — with grammar che
 - If your prompt is already in your chosen target language, it checks grammar and suggests a more natural version.
 - If your prompt is in another language, it translates it into a concise Claude Code prompt in your chosen target language.
 
+**Neither version modifies your input.** The feedback is visible only to you and is never inserted into Claude's model context.
+
 ## Comparison
 
 | Feature | [Original (Recommended)](./plugins/language-coach) | [Statusline](./plugins/language-coach-statusline) |

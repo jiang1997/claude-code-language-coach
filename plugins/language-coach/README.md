@@ -7,7 +7,7 @@ This Claude Code plugin gives prompt-level language feedback before Claude proce
 - If your prompt is already in your chosen target language, it checks grammar and suggests a more natural version.
 - If your prompt is in another language, it translates it into a concise Claude Code prompt in your chosen target language.
 
-Feedback is shown through a hook `systemMessage`. **The suggestions are visible in Claude Code but are not inserted into Claude's model context.**
+Feedback is shown through a hook `systemMessage`. **The plugin does not modify your input — the suggestions are visible only to you and are not inserted into Claude's model context.**
 
 ![Screenshot of Language Coach in Claude Code](./assets/screenshot.png)
 
