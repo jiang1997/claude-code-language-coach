@@ -1,6 +1,6 @@
 {
   "name": "language-coach-statusline",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Claude Code plugin that shows grammar suggestions and translates prompts into a configurable target language.",
   "engines": {
     "node": ">=18"
