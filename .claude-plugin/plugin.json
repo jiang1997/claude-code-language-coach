@@ -1,0 +1,35 @@
+{
+  "name": "language-coach",
+  "version": "1.0.0",
+  "description": "A Claude Code mod that checks and translates prompts in the background, with feedback above the prompt and in a /coach pane.",
+  "author": { "name": "jiang1997" },
+  "homepage": "https://github.com/jiang1997/claude-code-language-coach",
+  "repository": "https://github.com/jiang1997/claude-code-language-coach",
+  "license": "MIT",
+  "userConfig": {
+    "target_language": {
+      "type": "string",
+      "title": "Target language",
+      "description": "Language to translate into or check grammar against.",
+      "default": "English"
+    },
+    "source_language": {
+      "type": "string",
+      "title": "Back-translation language",
+      "description": "Optional language for translating the improved prompt back to verify its meaning. Leave empty to disable.",
+      "default": ""
+    },
+    "coach_model": {
+      "type": "string",
+      "title": "Coach model",
+      "description": "Claude model alias or ID, using the current session's credentials and usage quota.",
+      "default": "haiku"
+    },
+    "enabled": {
+      "type": "boolean",
+      "title": "Enable coaching",
+      "description": "Automatically review submitted prompts in interactive sessions.",
+      "default": true
+    }
+  }
+}

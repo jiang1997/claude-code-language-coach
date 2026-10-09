@@ -1,27 +1,14 @@
 {
   "name": "language-coach",
-  "description": "Language Coach plugins for Claude Code",
+  "description": "Language Coach mod for Claude Code",
   "owner": {
     "name": "jiang1997"
   },
   "plugins": [
     {
       "name": "language-coach",
-      "description": "Original blocking version with inline feedback.",
-      "source": {
-        "source": "git-subdir",
-        "url": "https://github.com/jiang1997/claude-code-language-coach.git",
-        "path": "plugins/language-coach"
-      }
-    },
-    {
-      "name": "language-coach-statusline",
-      "description": "Non-blocking version with CLI status line feedback.",
-      "source": {
-        "source": "git-subdir",
-        "url": "https://github.com/jiang1997/claude-code-language-coach.git",
-        "path": "plugins/language-coach-statusline"
-      }
+      "description": "Background language coaching with a native feedback pane.",
+      "source": "./"
     }
   ]
 }

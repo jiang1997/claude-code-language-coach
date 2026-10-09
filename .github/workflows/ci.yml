@@ -11,25 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 18
-
-      - name: Syntax check original version
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - name: Validate the mod and marketplace
         run: |
-          node --check plugins/language-coach/scripts/language-helper.js
-          node --check plugins/language-coach/scripts/language-core.js
-
-      - name: Syntax check statusline version
-        run: |
-          node --check plugins/language-coach-statusline/scripts/language-helper.js
-          node --check plugins/language-coach-statusline/scripts/language-core.js
-          node --check plugins/language-coach-statusline/scripts/statusline-cache.js
-          node --check plugins/language-coach-statusline/scripts/language-statusline.js
-
-      - name: Run tests
-        run: |
-          cd plugins/language-coach && node --test
-          cd ../language-coach-statusline && node --test
+          npx --yes @anthropic-ai/claude-code@2.1.295 plugin validate --strict .claude-plugin/plugin.json
+          npx --yes @anthropic-ai/claude-code@2.1.295 plugin validate --strict .
+      - name: Run native Mods tests
+        run: npx --yes @anthropic-ai/claude-code@2.1.295 plugin test .

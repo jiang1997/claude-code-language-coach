@@ -12,19 +12,7 @@ module.exports = [
     ],
     languageOptions: {
       ecmaVersion: 2022,
-      sourceType: "commonjs",
-      globals: {
-        AbortController: "readonly",
-        __dirname: "readonly",
-        Buffer: "readonly",
-        clearTimeout: "readonly",
-        console: "readonly",
-        fetch: "readonly",
-        module: "readonly",
-        process: "readonly",
-        require: "readonly",
-        setTimeout: "readonly"
-      }
+      sourceType: "module"
     },
     rules: {
       "no-undef": "error",
