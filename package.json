@@ -1,11 +1,13 @@
 {
   "name": "language-coach",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "lint": "eslint hooks/",
-    "test": "claude plugin test .",
+    "lint": "eslint hooks/ codex/",
+    "test": "npm run test:codex && npm run test:claude",
+    "test:claude": "claude plugin test .",
+    "test:codex": "node --test codex/test/*.test.js",
     "validate": "claude plugin validate --strict .claude-plugin/plugin.json && claude plugin validate --strict ."
   },
   "devDependencies": {

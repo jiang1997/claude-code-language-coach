@@ -1,5 +1,5 @@
 import { buildSystemPrompt, feedbackSummary, shouldReview } from "./prompt.js";
-import { chatCompletionsUrl, readFeedback } from "./provider.js";
+import { buildChatRequest, chatCompletionsUrl, readFeedback } from "./provider.js";
 
 const PANE = "language-coach";
 
@@ -24,15 +24,7 @@ async function review($, text, config) {
     const request = $.http.fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${config.apiKey}` },
-      body: JSON.stringify({
-        model: config.model,
-        messages: [
-          { role: "system", content: buildSystemPrompt(config.target, config.source) },
-          { role: "user", content: text }
-        ],
-        max_tokens: 1600,
-        stream: false
-      })
+      body: JSON.stringify(buildChatRequest(text, config.model, config.target, config.source))
     }).catch(() => {
       throw new Error("API request failed. Check your provider URL, credentials, and network.");
     });

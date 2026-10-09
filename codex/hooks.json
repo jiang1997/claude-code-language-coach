@@ -1,0 +1,30 @@
+{
+  "description": "Background language coaching for Codex",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${PLUGIN_ROOT}/codex/coach.js\"",
+            "commandWindows": "node --input-type=commonjs -e \"import(require('node:url').pathToFileURL(require('node:path').join(process.env.PLUGIN_ROOT,'codex','coach.js')).href).then(m=>m.main())\"",
+            "async": true,
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${PLUGIN_ROOT}/codex/coach.js\"",
+            "commandWindows": "node --input-type=commonjs -e \"import(require('node:url').pathToFileURL(require('node:path').join(process.env.PLUGIN_ROOT,'codex','coach.js')).href).then(m=>m.main())\"",
+            "timeout": 3
+          }
+        ]
+      }
+    ]
+  }
+}

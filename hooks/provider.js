@@ -1,3 +1,17 @@
+import { buildSystemPrompt } from "./prompt.js";
+
+export function buildChatRequest(text, model, target, source) {
+  return {
+    model,
+    messages: [
+      { role: "system", content: buildSystemPrompt(target, source) },
+      { role: "user", content: text }
+    ],
+    max_tokens: 1600,
+    stream: false
+  };
+}
+
 export function chatCompletionsUrl(baseUrl) {
   let url;
   try {

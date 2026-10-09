@@ -1,0 +1,12 @@
+{
+  "name": "language-coach",
+  "interface": { "displayName": "Language Coach" },
+  "plugins": [
+    {
+      "name": "language-coach",
+      "source": { "source": "local", "path": "./" },
+      "policy": { "installation": "AVAILABLE" },
+      "category": "Productivity"
+    }
+  ]
+}

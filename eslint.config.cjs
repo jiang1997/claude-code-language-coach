@@ -26,5 +26,14 @@ module.exports = [
         }
       ]
     }
+  },
+  {
+    files: ["codex/**/*.js"],
+    languageOptions: {
+      globals: {
+        process: "readonly", fetch: "readonly", AbortSignal: "readonly",
+        setTimeout: "readonly", clearTimeout: "readonly"
+      }
+    }
   }
 ];

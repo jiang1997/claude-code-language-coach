@@ -1,0 +1,21 @@
+{
+  "name": "language-coach",
+  "version": "1.2.0",
+  "description": "Background grammar checks, translation, and back-translation for Codex prompts, without adding feedback to model context.",
+  "author": { "name": "jiang1997" },
+  "homepage": "https://github.com/jiang1997/claude-code-language-coach",
+  "repository": "https://github.com/jiang1997/claude-code-language-coach",
+  "license": "MIT",
+  "hooks": "./codex/hooks.json",
+  "interface": {
+    "displayName": "Language Coach",
+    "shortDescription": "Language coaching for prompts",
+    "longDescription": "Review prompts in the background and display grammar, translation, and back-translation feedback. Use an OpenAI-compatible API or a separate temporary Codex session with your existing login.",
+    "developerName": "jiang1997",
+    "category": "Productivity",
+    "capabilities": [],
+    "websiteURL": "https://github.com/jiang1997/claude-code-language-coach",
+    "composerIcon": "./assets/coach.svg",
+    "logo": "./assets/coach.svg"
+  }
+}
