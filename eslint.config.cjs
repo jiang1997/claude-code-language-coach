@@ -12,7 +12,8 @@ module.exports = [
     ],
     languageOptions: {
       ecmaVersion: 2022,
-      sourceType: "module"
+      sourceType: "module",
+      globals: { URL: "readonly" }
     },
     rules: {
       "no-undef": "error",

@@ -1,26 +1,59 @@
 import { buildSystemPrompt, feedbackSummary, shouldReview } from "./prompt.js";
+import { chatCompletionsUrl, readFeedback } from "./provider.js";
 
 const PANE = "language-coach";
 
 // The Mods analyser follows API calls in top-level helpers in this module.
 async function review($, text, config) {
-  const reply = await $.model.complete({
-    model: config.model,
-    system: buildSystemPrompt(config.target, config.source),
-    prompt: text,
-    maxTokens: 1600,
-    timeoutMs: 30000
-  });
-  if (!reply.isAnswered) throw new Error(`Review unavailable (${reply.reason}).`);
-  if (!reply.text?.trim()) throw new Error("The model returned an empty review.");
-  return reply.text.trim().slice(0, 9500);
+  if (!config.apiKey) {
+    const reply = await $.model.complete({
+      model: "haiku",
+      system: buildSystemPrompt(config.target, config.source),
+      prompt: text,
+      maxTokens: 1600,
+      timeoutMs: 30000
+    });
+    if (!reply.isAnswered) throw new Error(`Haiku review unavailable (${reply.reason}).`);
+    if (!reply.text?.trim()) throw new Error("Haiku returned an empty review.");
+    return reply.text.trim().slice(0, 9500);
+  }
+  if (!config.model) throw new Error("Configure the Language Coach model in /plugin.");
+  const url = chatCompletionsUrl(config.baseUrl);
+  let timeout;
+  try {
+    const request = $.http.fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${config.apiKey}` },
+      body: JSON.stringify({
+        model: config.model,
+        messages: [
+          { role: "system", content: buildSystemPrompt(config.target, config.source) },
+          { role: "user", content: text }
+        ],
+        max_tokens: 1600,
+        stream: false
+      })
+    }).catch(() => {
+      throw new Error("API request failed. Check your provider URL, credentials, and network.");
+    });
+    // http.fetch has no abort/timeout option. Bound the UI wait with a Mods timer;
+    // the host request may finish later, but its response is no longer displayed.
+    const expired = new Promise((_resolve, reject) => {
+      timeout = $.clock.after(30000, () => reject(new Error("API request timed out after 30 seconds.")));
+    });
+    return readFeedback(await Promise.race([request, expired]));
+  } finally {
+    timeout?.cancel();
+  }
 }
 
 export function register(on, options = {}) {
   const config = {
     target: String(options.target_language || "English"),
     source: String(options.source_language || ""),
-    model: String(options.coach_model || "haiku")
+    apiKey: String(options.api_key || "").trim(),
+    baseUrl: String(options.base_url || "https://api.openai.com/v1").trim(),
+    model: String(options.model || "gpt-4o-mini").trim()
   };
   let enabled = options.enabled !== false;
   let interactive = false;

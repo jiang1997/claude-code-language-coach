@@ -11,6 +11,8 @@ A Claude Code **mod** that helps you practice languages while writing coding pro
 
 The original prompt reaches Claude unchanged. Coaching results stay in the UI and are not inserted into the coding conversation.
 
+By default, coaching uses **Haiku** through your current Claude Code session. Set an API key to use an OpenAI-compatible provider instead.
+
 ## Requirements
 
 Use **Claude Code 2.1.295 or later** (the version used for validation and automated tests). Mods require at least 2.1.287; older versions are not supported by this project.
@@ -39,18 +41,24 @@ Submit a prompt. A short summary appears above the input while Claude continues 
 | `/coach on` | Resume coaching for this session |
 | `/coach clear` | Clear feedback and ignore any pending result |
 
-Open `/plugin`, select the installed Language Coach plugin, and configure:
+Open `/plugin` and select the installed Language Coach plugin to configure languages or an optional OpenAI-compatible provider:
 
 | Option | Default | Purpose |
 | --- | --- | --- |
 | `target_language` | `English` | Language to translate into or improve |
 | `source_language` | empty | Optional back-translation language, e.g. `简体中文` |
-| `coach_model` | `haiku` | Claude model alias or full ID |
+| `api_key` | empty | Optional provider key; leave empty to use Haiku; marked as sensitive |
+| `base_url` | `https://api.openai.com/v1` | Provider API base URL or full Chat Completions URL |
+| `model` | `gpt-4o-mini` | External provider model; used only when an API key is set |
 | `enabled` | `true` | Enable automatic coaching |
 
-The coach uses the current session's credentials via `$.model.complete`; no separate API key or provider URL is needed. Each reviewed prompt uses your Claude plan or API quota. Requests time out after 30 seconds. Reload the plugin or start a new session after changing its options.
+For example, set `base_url` to `https://your-provider.example/v1`, `api_key` to your provider's key, and `model` to a model that provider supports. Include the API prefix your provider requires, such as `/v1`. The coach appends `/chat/completions` unless the URL already ends with it; query parameters are preserved. HTTP endpoints are supported for local services too.
 
-Empty prompts, slash commands, complete fenced code blocks, and prompts longer than 4,000 characters are skipped. Automatic notifications and scheduled turns are not reviewed. Only the latest submitted prompt's feedback is displayed; late results are ignored. Feedback is kept in session memory and cleared on session end, `/clear`, or `/resume`. An already-started model request can still consume quota after its feedback is cleared.
+When `api_key` is empty, the coach calls `$.model.complete` with `model: "haiku"`, using your current session's credentials and Claude quota. Setting only a URL or external model does not enable the external provider. Clear the key to return to Haiku.
+
+When an API key is set, the coach calls your provider via `$.http.fetch`, with a Bearer API key and a non-streaming Chat Completions request, using your provider's quota. Provider failures are displayed as errors rather than retried through Haiku. Both modes send the tutor instructions and current submitted prompt, without the coding conversation's history. Requests have a 30-second wait limit; an external HTTP request may still finish later. Reload the plugin or start a new session after changing its options. The former `coach_model` option is replaced by `model`, which applies only to external requests.
+
+Empty prompts, slash commands, complete fenced code blocks, and prompts longer than 4,000 characters are skipped. Automatic notifications and scheduled turns are not reviewed. Only the latest submitted prompt's feedback is displayed; late results are ignored. Feedback is kept in session memory and cleared on session end, `/clear`, or `/resume`. An already-started API request can still consume provider quota after its feedback is cleared.
 
 ## Development
 
@@ -65,9 +73,11 @@ npm ci
 npm run lint
 ```
 
+Local loading with `--plugin-dir` works with Haiku immediately. To use an external provider, run `/plugin configure language-coach` in the session and set the API options.
+
 Linting requires Node.js 22.13+ (22.x) or 24+. Node.js is not needed to run the installed mod.
 
-Tests use Claude Code's native Mods test kit, mock models and timers, and require no sign-in or network. They validate event behavior and element trees, rather than real model quality or screen layout.
+Tests use Claude Code's native Mods test kit, mock HTTP responses, model calls, and timers, and require no sign-in or network. They validate Haiku fallback, API requests, error handling, event behavior, and element trees, rather than real provider availability, model quality, or screen layout.
 
 ## Repository layout
 
@@ -81,7 +91,8 @@ claude-code-language-coach/
 ├── hooks/
 │   ├── hooks.json           # Declares the Mods entry module
 │   ├── register.js          # Background review, commands, and UI
-│   └── prompt.js            # Tutor prompt and text helpers
+│   ├── prompt.js            # Tutor prompt and text helpers
+│   └── provider.js          # API URL and response handling
 ├── tests/
 │   └── coach.test.ts        # Native Mods tests
 ├── .github/

@@ -1,6 +1,6 @@
 {
   "name": "language-coach",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A Claude Code mod that checks and translates prompts in the background, with feedback above the prompt and in a /coach pane.",
   "author": { "name": "jiang1997" },
   "homepage": "https://github.com/jiang1997/claude-code-language-coach",
@@ -19,11 +19,26 @@
       "description": "Optional language for translating the improved prompt back to verify its meaning. Leave empty to disable.",
       "default": ""
     },
-    "coach_model": {
+    "api_key": {
+      "type": "string",
+      "title": "OpenAI-compatible API key",
+      "description": "Optional API key for your OpenAI-compatible provider. Leave empty to use Haiku through the current Claude Code session.",
+      "sensitive": true,
+      "default": ""
+    },
+    "base_url": {
+      "type": "string",
+      "title": "OpenAI-compatible API URL",
+      "description": "Provider API base URL, including its API prefix (for example /v1), or the full /chat/completions endpoint.",
+      "default": "https://api.openai.com/v1",
+      "required": true
+    },
+    "model": {
       "type": "string",
       "title": "Coach model",
-      "description": "Claude model alias or ID, using the current session's credentials and usage quota.",
-      "default": "haiku"
+      "description": "Model name accepted by your OpenAI-compatible provider.",
+      "default": "gpt-4o-mini",
+      "required": true
     },
     "enabled": {
       "type": "boolean",

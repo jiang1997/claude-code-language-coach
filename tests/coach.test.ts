@@ -1,8 +1,10 @@
 import { expect, mock, test } from "claude-code/testing";
 import { buildSystemPrompt, feedbackSummary, shouldReview } from "../hooks/prompt.js";
+import { chatCompletionsUrl, readFeedback } from "../hooks/provider.js";
 
 const FEEDBACK = "- Improved: Please fix this bug.\n- Alternative: Could you fix this bug?\n- Notes: Use the singular noun bug.";
-const USAGE = { input_tokens: 10, output_tokens: 20, cache_read_input_tokens: 0, cache_creation_input_tokens: 0 };
+const CONFIG = { options: { api_key: "test-key", base_url: "https://provider.example/v1", model: "test-model" } };
+const response = (content = FEEDBACK) => ({ value: { status: 200, ok: true, headers: {}, text: JSON.stringify({ choices: [{ message: { content } }] }) } });
 const START = { surface: "terminal", isInteractive: true, cwd: "/work" } as const;
 const BAND = { plugin: "language-coach", component: "AbovePrompt", props: {} } as const;
 const PANE = {
@@ -11,9 +13,10 @@ const PANE = {
 } as const;
 const submitted = (text: string, kind = "composer") => ({ text, wait: false, origin: { kind } });
 
-function setup(on, model?) {
+function setup(on, provider?, model?) {
   const clock = mock.clock(on);
   const requests: any[] = [];
+  const modelRequests: any[] = [];
   const logs: string[] = [];
   const opened: string[] = [];
   const closed: string[] = [];
@@ -25,28 +28,36 @@ function setup(on, model?) {
   on("ui.open", ($, e) => { opened.push(e.id); return { value: { isPlaced: true } }; });
   on("ui.close", ($, e) => { closed.push(e.id); return { value: undefined }; });
   on("ui.render", () => ({ type: "Text", props: {}, children: ["Another mod's band"] }));
-  on("model.complete", async ($, e) => {
+  on("http.fetch", async ($, e) => {
     requests.push(e);
-    return model ? model(e, clock) : { value: { isAnswered: true, text: FEEDBACK, usage: USAGE } };
+    return provider ? provider(e, clock) : response();
   });
-  return { clock, requests, logs, opened, closed };
+  on("model.complete", async ($, e) => {
+    modelRequests.push(e);
+    return model ? model(e, clock) : { value: { isAnswered: true, text: FEEDBACK } };
+  });
+  return { clock, requests, modelRequests, logs, opened, closed };
 }
 
-test("passes the original prompt and existing context through before requesting a review", async ($, on) => {
-  const { clock, requests } = setup(on);
+test("passes the original prompt and existing context through before requesting a review", CONFIG, async ($, on) => {
+  const { clock, requests, modelRequests } = setup(on);
   await $.session.start(START);
   const input = { ...submitted("please fix this bugs"), context: ["Existing context"] };
   expect(await $.prompt.submit(input)).toEqual({ text: input.text, context: input.context });
   expect(requests).toEqual([]);
   await clock.advance(1);
   expect(requests.length).toBe(1);
-  expect(requests[0]).toMatchObject({ model: "haiku", prompt: input.text, timeoutMs: 30000, maxTokens: 1600 });
-  expect(requests[0].system).toContain("Do not answer, solve, debug");
+  expect(modelRequests).toEqual([]);
+  expect(requests[0]).toMatchObject({ url: "https://provider.example/v1/chat/completions", init: { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer test-key" } } });
+  const body = JSON.parse(requests[0].init.body);
+  expect(body).toMatchObject({ model: "test-model", max_tokens: 1600, stream: false });
+  expect(body.messages[1]).toEqual({ role: "user", content: input.text });
+  expect(body.messages[0].content).toContain("Do not answer, solve, debug");
   const pane = await $.ui.mount({ ...PANE, surface: "terminal" });
   expect(await pane.find({ type: "Markdown" })).toMatchObject({ props: { text: FEEDBACK } });
 });
 
-test("renders feedback and buttons on terminal and Desktop while preserving other mods", async ($, on) => {
+test("renders feedback and buttons on terminal and Desktop while preserving other mods", CONFIG, async ($, on) => {
   const { clock, opened, closed } = setup(on);
   await $.session.start(START);
   await $.prompt.submit(submitted("please fix this bugs"));
@@ -66,7 +77,7 @@ test("renders feedback and buttons on terminal and Desktop while preserving othe
   expect(closed).toEqual(["language-coach", "language-coach"]);
 });
 
-test("/coach opens the pane without returning model-context command text", async ($, on) => {
+test("/coach opens the pane without returning model-context command text", CONFIG, async ($, on) => {
   const { opened } = setup(on);
   await $.session.start(START);
   expect(await $.command.run({ command: "coach", args: "" })).toEqual({});
@@ -75,7 +86,7 @@ test("/coach opens the pane without returning model-context command text", async
   expect(await pane.find({ type: "Text", text: /Submit a prompt/ })).toBeDefined();
 });
 
-test("pausing cancels queued checks and resuming reviews the next prompt", async ($, on) => {
+test("pausing cancels queued checks and resuming reviews the next prompt", CONFIG, async ($, on) => {
   const { clock, requests } = setup(on);
   await $.session.start(START);
   await $.prompt.submit(submitted("first prompt"));
@@ -87,22 +98,23 @@ test("pausing cancels queued checks and resuming reviews the next prompt", async
   await $.command.run({ command: "coach", args: "on" });
   await $.prompt.submit(submitted("next prompt"));
   await clock.advance(1);
-  expect(requests.map(r => r.prompt)).toEqual(["next prompt"]);
+  expect(requests.map(r => JSON.parse(r.init.body).messages[1].content)).toEqual(["next prompt"]);
 });
 
-test("only the latest queued prompt is checked", async ($, on) => {
+test("only the latest queued prompt is checked", CONFIG, async ($, on) => {
   const { clock, requests } = setup(on);
   await $.session.start(START);
   await $.prompt.submit(submitted("first prompt"));
   await $.prompt.submit(submitted("second prompt"));
   await clock.advance(1);
-  expect(requests.map(r => r.prompt)).toEqual(["second prompt"]);
+  expect(requests.map(r => JSON.parse(r.init.body).messages[1].content)).toEqual(["second prompt"]);
 });
 
-test("a slow older reply cannot replace a newer review", async ($, on) => {
+test("a slow older reply cannot replace a newer review", CONFIG, async ($, on) => {
   const { clock } = setup(on, async (e, clock) => {
-    if (e.prompt === "first prompt") await clock.sleep(20);
-    return { value: { isAnswered: true, text: `- Improved: ${e.prompt}`, usage: USAGE } };
+    const prompt = JSON.parse(e.init.body).messages[1].content;
+    if (prompt === "first prompt") await clock.sleep(20);
+    return response(`- Improved: ${prompt}`);
   });
   await $.session.start(START);
   await $.prompt.submit(submitted("first prompt"));
@@ -114,10 +126,10 @@ test("a slow older reply cannot replace a newer review", async ($, on) => {
   expect(await pane.find({ type: "Markdown" })).toMatchObject({ props: { text: "- Improved: second prompt" } });
 });
 
-test("clearing feedback invalidates an already-running review", async ($, on) => {
+test("clearing feedback invalidates an already-running review", CONFIG, async ($, on) => {
   const { clock } = setup(on, async (_e, clock) => {
     await clock.sleep(20);
-    return { value: { isAnswered: true, text: FEEDBACK, usage: USAGE } };
+    return response();
   });
   await $.session.start(START);
   await $.prompt.submit(submitted("first prompt"));
@@ -128,7 +140,7 @@ test("clearing feedback invalidates an already-running review", async ($, on) =>
   expect(await band.find({ key: "coach-details" })).toBeUndefined();
 });
 
-test("session clear cancels work and coaching continues for subsequent prompts", async ($, on) => {
+test("session clear cancels work and coaching continues for subsequent prompts", CONFIG, async ($, on) => {
   const { clock, requests } = setup(on);
   await $.session.start(START);
   await $.prompt.submit(submitted("first prompt"));
@@ -137,10 +149,10 @@ test("session clear cancels work and coaching continues for subsequent prompts",
   expect(requests).toEqual([]);
   await $.prompt.submit(submitted("after clear"));
   await clock.advance(1);
-  expect(requests.map(r => r.prompt)).toEqual(["after clear"]);
+  expect(requests.map(r => JSON.parse(r.init.body).messages[1].content)).toEqual(["after clear"]);
 });
 
-test("non-interactive sessions never automatically call the coach model", async ($, on) => {
+test("non-interactive sessions never automatically call the coach model", CONFIG, async ($, on) => {
   const { clock, requests } = setup(on);
   await $.session.start({ ...START, surface: null, isInteractive: false });
   await $.prompt.submit(submitted("fix this bugs", "sdk"));
@@ -149,7 +161,7 @@ test("non-interactive sessions never automatically call the coach model", async 
   expect(requests).toEqual([]);
 });
 
-test("automatic notifications are skipped while remote user prompts are reviewed", async ($, on) => {
+test("automatic notifications are skipped while remote user prompts are reviewed", CONFIG, async ($, on) => {
   const { clock, requests } = setup(on);
   await $.session.start(START);
   await $.prompt.submit(submitted("a background task finished", "task-notification"));
@@ -160,7 +172,7 @@ test("automatic notifications are skipped while remote user prompts are reviewed
   expect(requests.length).toBe(1);
 });
 
-test("skips commands, huge prompts, and complete code blocks without stale feedback", async ($, on) => {
+test("skips commands, huge prompts, and complete code blocks without stale feedback", CONFIG, async ($, on) => {
   const { clock, requests } = setup(on);
   await $.session.start(START);
   await $.prompt.submit(submitted("please fix this bugs"));
@@ -173,17 +185,17 @@ test("skips commands, huge prompts, and complete code blocks without stale feedb
   expect(await band.find({ key: "coach-details" })).toBeUndefined();
 });
 
-test("model failures leave the coding submission successful and show a UI error", async ($, on) => {
-  const { clock, logs } = setup(on, () => ({ value: { isAnswered: false, reason: "timeout" } }));
+test("provider errors leave the coding submission successful and do not expose response bodies", CONFIG, async ($, on) => {
+  const { clock, logs } = setup(on, () => ({ value: { status: 401, ok: false, headers: {}, text: 'secret-key echoed by provider' } }));
   await $.session.start(START);
   expect(await $.prompt.submit(submitted("please fix this bugs"))).toEqual({ text: "please fix this bugs" });
   await clock.advance(1);
-  expect(logs).toEqual(["Language Coach: Review unavailable (timeout)."]);
+  expect(logs).toEqual(["Language Coach: Provider returned HTTP 401. Check your API settings."]);
   const pane = await $.ui.mount({ ...PANE, surface: "terminal" });
-  expect(await pane.find({ type: "Text", text: /Review unavailable/ })).toBeDefined();
+  expect(await pane.find({ type: "Text", text: /Provider returned HTTP 401/ })).toBeDefined();
 });
 
-test("interactive clients without panes receive UI-only logs", async ($, on) => {
+test("interactive clients without panes receive UI-only logs", CONFIG, async ($, on) => {
   const { clock, logs, opened } = setup(on);
   await $.session.start({ ...START, surface: "vscode" });
   await $.prompt.submit(submitted("please fix this bugs"));
@@ -201,4 +213,124 @@ test("the tutor treats instructions as data and back-translates the improved ver
   expect(buildSystemPrompt("English", "")).not.toContain("- Source:");
   expect(shouldReview("Explain this code:\n```js\nconst x = 1;\n``` ")).toBe(true);
   expect(feedbackSummary(FEEDBACK)).toBe("Please fix this bug.");
+});
+
+test("uses custom endpoint, model, and language settings", {
+  options: { api_key: "custom-key", base_url: "http://localhost:8080/v1/chat/completions/", model: "custom-model", target_language: "Japanese", source_language: "简体中文" }
+}, async ($, on) => {
+  const { clock, requests } = setup(on);
+  await $.session.start(START);
+  await $.prompt.submit(submitted("fix this bugs"));
+  await clock.advance(1);
+  expect(requests[0].url).toBe("http://localhost:8080/v1/chat/completions");
+  expect(requests[0].init.headers.Authorization).toBe("Bearer custom-key");
+  const body = JSON.parse(requests[0].init.body);
+  expect(body.model).toBe("custom-model");
+  expect(body.messages[0].content).toContain("in Japanese");
+  expect(body.messages[0].content).toContain("back into 简体中文");
+});
+
+test("network errors do not echo credentials into UI output", CONFIG, async ($, on) => {
+  const { clock, logs } = setup(on, () => ({ deny: "failed request with Bearer test-key" }));
+  await $.session.start(START);
+  await $.prompt.submit(submitted("fix this bugs"));
+  await clock.advance(1);
+  expect(logs).toEqual(["Language Coach: API request failed. Check your provider URL, credentials, and network."]);
+});
+
+test("times out a slow request and ignores its eventual response", CONFIG, async ($, on) => {
+  const { clock, logs } = setup(on, async (_e, clock) => {
+    await clock.sleep(40000);
+    return response();
+  });
+  await $.session.start(START);
+  await $.prompt.submit(submitted("fix this bugs"));
+  await clock.advance(1);
+  await clock.advance(30000);
+  expect(logs).toEqual(["Language Coach: API request timed out after 30 seconds."]);
+  await clock.advance(10000);
+  const pane = await $.ui.mount({ ...PANE, surface: "terminal" });
+  expect(await pane.find({ type: "Markdown" })).toBeUndefined();
+  expect(await pane.find({ type: "Text", text: /timed out/ })).toBeDefined();
+});
+
+test("a completed request cancels its timeout notice", CONFIG, async ($, on) => {
+  const { clock, logs } = setup(on);
+  await $.session.start(START);
+  await $.prompt.submit(submitted("fix this bugs"));
+  await clock.advance(1);
+  await clock.advance(30000);
+  expect(logs).toEqual([]);
+  const pane = await $.ui.mount({ ...PANE, surface: "terminal" });
+  expect(await pane.find({ type: "Markdown" })).toBeDefined();
+});
+
+test("invalid API settings never make a network request", {
+  options: { ...CONFIG.options, base_url: "not-a-url" }
+}, async ($, on) => {
+  const { clock, requests, logs } = setup(on);
+  await $.session.start(START);
+  expect(await $.prompt.submit(submitted("fix this bugs"))).toEqual({ text: "fix this bugs" });
+  await clock.advance(1);
+  expect(requests).toEqual([]);
+  expect(logs).toEqual(["Language Coach: Set base_url to a valid HTTP or HTTPS API URL."]);
+});
+
+test("accepts API prefixes and full endpoints without losing query parameters", () => {
+  expect(chatCompletionsUrl(" https://provider.example/api/v1/ ")).toBe("https://provider.example/api/v1/chat/completions");
+  expect(chatCompletionsUrl("https://provider.example/v1/chat/completions?version=1")).toBe("https://provider.example/v1/chat/completions?version=1");
+  expect(() => chatCompletionsUrl("file:///tmp/api")).toThrow("HTTP or HTTPS");
+  expect(() => chatCompletionsUrl("https://user:password@provider.example/v1")).toThrow("without embedded credentials");
+});
+
+test("rejects malformed and empty provider responses without exposing their contents", () => {
+  expect(() => readFeedback({ ok: true, text: "secret in malformed JSON" })).toThrow("Provider returned invalid JSON.");
+  for (const body of [null, {}, { choices: [] }, { choices: [{ message: { content: " " } }] }]) {
+    expect(() => readFeedback({ ok: true, text: JSON.stringify(body) })).toThrow("missing choices[0].message.content");
+  }
+});
+
+test("uses Haiku with session credentials when API configuration is absent", async ($, on) => {
+  const { clock, requests, modelRequests } = setup(on);
+  await $.session.start(START);
+  const input = { ...submitted("fix this bugs"), context: ["Existing coding context"] };
+  expect(await $.prompt.submit(input)).toEqual({ text: input.text, context: input.context });
+  expect(modelRequests).toEqual([]);
+  await clock.advance(1);
+  expect(requests).toEqual([]);
+  expect(modelRequests.length).toBe(1);
+  expect(modelRequests[0]).toMatchObject({ model: "haiku", prompt: input.text, maxTokens: 1600, timeoutMs: 30000 });
+  expect(modelRequests[0].system).toContain("Do not answer, solve, debug");
+  const pane = await $.ui.mount({ ...PANE, surface: "terminal" });
+  expect(await pane.find({ type: "Markdown" })).toMatchObject({ props: { text: FEEDBACK } });
+});
+
+test("uses Haiku when a URL is set but the API key is blank", {
+  options: { api_key: "   ", base_url: "https://provider.example/v1", model: "external-model", target_language: "Japanese", source_language: "简体中文" }
+}, async ($, on) => {
+  const { clock, requests, modelRequests } = setup(on);
+  await $.session.start(START);
+  await $.prompt.submit(submitted("fix this bugs"));
+  await clock.advance(1);
+  expect(requests).toEqual([]);
+  expect(modelRequests[0].model).toBe("haiku");
+  expect(modelRequests[0].system).toContain("in Japanese");
+  expect(modelRequests[0].system).toContain("back into 简体中文");
+});
+
+test("Haiku failures show a UI error without blocking the coding prompt", async ($, on) => {
+  const { clock, logs } = setup(on, undefined, () => ({ value: { isAnswered: false, reason: "timeout" } }));
+  await $.session.start(START);
+  expect(await $.prompt.submit(submitted("fix this bugs"))).toEqual({ text: "fix this bugs" });
+  await clock.advance(1);
+  expect(logs).toEqual(["Language Coach: Haiku review unavailable (timeout)."]);
+});
+
+test("a configured provider failure does not silently call Haiku", CONFIG, async ($, on) => {
+  const { clock, modelRequests, logs } = setup(on, () => ({ value: { status: 401, ok: false, headers: {}, text: "unauthorized" } }));
+  await $.session.start(START);
+  await $.prompt.submit(submitted("fix this bugs"));
+  await clock.advance(1);
+  expect(modelRequests).toEqual([]);
+  expect(logs).toEqual(["Language Coach: Provider returned HTTP 401. Check your API settings."]);
 });
