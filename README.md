@@ -31,7 +31,7 @@ For Claude Code, the terminal and Desktop Code tab can show the summary and feed
 In Claude Code:
 
 ```text
-/plugin marketplace add jiang1997/claude-code-language-coach
+/plugin marketplace add jiang1997/prompt-language-coach
 /plugin install language-coach@language-coach
 ```
 
@@ -40,7 +40,7 @@ If you previously installed `language-coach-statusline`, uninstall it and remove
 ## Install in Codex CLI
 
 ```bash
-codex plugin marketplace add jiang1997/claude-code-language-coach
+codex plugin marketplace add jiang1997/prompt-language-coach
 codex plugin add language-coach@language-coach
 ```
 
@@ -100,7 +100,7 @@ Tests use Claude Code's native Mods test kit, mock HTTP responses, model calls, 
 This repository hosts two client adapters with one shared plugin root. Claude Code loads `.claude-plugin/plugin.json`; Codex loads `.codex-plugin/plugin.json`, which points to its own hook configuration. Each client has a marketplace entry pointing at the repository root. Local Claude Code development continues to use `claude --plugin-dir .`.
 
 ```text
-claude-code-language-coach/
+prompt-language-coach/
 ├── .claude-plugin/
 │   ├── plugin.json          # Plugin metadata and user options
 │   └── marketplace.json     # Claude Code marketplace

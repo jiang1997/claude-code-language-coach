@@ -15,7 +15,7 @@ Codex delivers async output at the next safe point in an active turn, or on the 
 ## Install
 
 ```bash
-codex plugin marketplace add jiang1997/claude-code-language-coach
+codex plugin marketplace add jiang1997/prompt-language-coach
 codex plugin add language-coach@language-coach
 codex
 ```

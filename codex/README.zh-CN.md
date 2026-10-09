@@ -15,7 +15,7 @@ Codex 在当前轮次的下一个安全时点交付异步反馈；会话空闲�
 ## 安装
 
 ```bash
-codex plugin marketplace add jiang1997/claude-code-language-coach
+codex plugin marketplace add jiang1997/prompt-language-coach
 codex plugin add language-coach@language-coach
 codex
 ```

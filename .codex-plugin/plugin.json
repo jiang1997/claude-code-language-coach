@@ -3,8 +3,8 @@
   "version": "1.2.0",
   "description": "Background grammar checks, translation, and back-translation for Codex prompts, without adding feedback to model context.",
   "author": { "name": "jiang1997" },
-  "homepage": "https://github.com/jiang1997/claude-code-language-coach",
-  "repository": "https://github.com/jiang1997/claude-code-language-coach",
+  "homepage": "https://github.com/jiang1997/prompt-language-coach",
+  "repository": "https://github.com/jiang1997/prompt-language-coach",
   "license": "MIT",
   "hooks": "./codex/hooks.json",
   "interface": {
@@ -14,7 +14,7 @@
     "developerName": "jiang1997",
     "category": "Productivity",
     "capabilities": [],
-    "websiteURL": "https://github.com/jiang1997/claude-code-language-coach",
+    "websiteURL": "https://github.com/jiang1997/prompt-language-coach",
     "composerIcon": "./assets/coach.svg",
     "logo": "./assets/coach.svg"
   }

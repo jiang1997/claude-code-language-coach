@@ -31,7 +31,7 @@ Codex 版需要 **Codex CLI 0.162.0+** 与 **Node.js 22.13+（22.x）或 24+**�
 在 Claude Code 中执行：
 
 ```text
-/plugin marketplace add jiang1997/claude-code-language-coach
+/plugin marketplace add jiang1997/prompt-language-coach
 /plugin install language-coach@language-coach
 ```
 
@@ -40,7 +40,7 @@ Codex 版需要 **Codex CLI 0.162.0+** 与 **Node.js 22.13+（22.x）或 24+**�
 ## 安装到 Codex CLI
 
 ```bash
-codex plugin marketplace add jiang1997/claude-code-language-coach
+codex plugin marketplace add jiang1997/prompt-language-coach
 codex plugin add language-coach@language-coach
 ```
 
@@ -100,7 +100,7 @@ Lint 和 Codex Hook 需要 Node.js 22.13+（22.x）或 24+；运行安装后的 
 本项目在同一插件根目录中提供两个客户端适配器。Claude Code 读取 `.claude-plugin/plugin.json`；Codex 读取 `.codex-plugin/plugin.json`，其中明确指定自己的 Hook 配置。两端的市场清单都指向仓库根目录。Claude Code 本地开发仍使用 `claude --plugin-dir .`。
 
 ```text
-claude-code-language-coach/
+prompt-language-coach/
 ├── .claude-plugin/
 │   ├── plugin.json          # 插件元数据与用户配置
 │   └── marketplace.json     # Claude Code 市场清单
