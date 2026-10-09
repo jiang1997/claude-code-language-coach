@@ -1,6 +1,6 @@
 {
   "name": "language-coach",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A Claude Code mod that checks and translates prompts in the background, with feedback above the prompt and in a /coach pane.",
   "author": { "name": "jiang1997" },
   "homepage": "https://github.com/jiang1997/claude-code-language-coach",
