@@ -9,7 +9,7 @@ const START = { surface: "terminal", isInteractive: true, cwd: "/work" } as cons
 const BAND = { plugin: "language-coach", component: "AbovePrompt", props: {} } as const;
 const PANE = {
   plugin: "language-coach", component: "Pane", requestId: "language-coach",
-  props: { title: "Language Coach", isFocused: true, bodyColumns: 60, placement: "inline", scroll: { offset: 0, bodyRows: 10 }, view: {} }
+  props: { title: "Echo", isFocused: true, bodyColumns: 60, placement: "inline", scroll: { offset: 0, bodyRows: 10 }, view: {} }
 } as const;
 const submitted = (text: string, kind = "composer") => ({ text, wait: false, origin: { kind } });
 
@@ -190,7 +190,7 @@ test("provider errors leave the coding submission successful and do not expose r
   await $.session.start(START);
   expect(await $.prompt.submit(submitted("please fix this bugs"))).toEqual({ text: "please fix this bugs" });
   await clock.advance(1);
-  expect(logs).toEqual(["Language Coach: Provider returned HTTP 401. Check your API settings."]);
+  expect(logs).toEqual(["Echo: Provider returned HTTP 401. Check your API settings."]);
   const pane = await $.ui.mount({ ...PANE, surface: "terminal" });
   expect(await pane.find({ type: "Text", text: /Provider returned HTTP 401/ })).toBeDefined();
 });
@@ -200,7 +200,7 @@ test("interactive clients without panes receive UI-only logs", CONFIG, async ($,
   await $.session.start({ ...START, surface: "vscode" });
   await $.prompt.submit(submitted("please fix this bugs"));
   await clock.advance(1);
-  expect(logs).toEqual([`Language Coach (English)\n${FEEDBACK}`]);
+  expect(logs).toEqual([`Echo (English)\n${FEEDBACK}`]);
   expect(await $.command.run({ command: "coach", args: "" })).toEqual({});
   expect(opened).toEqual([]);
 });
@@ -235,7 +235,7 @@ test("network errors do not echo credentials into UI output", CONFIG, async ($, 
   await $.session.start(START);
   await $.prompt.submit(submitted("fix this bugs"));
   await clock.advance(1);
-  expect(logs).toEqual(["Language Coach: API request failed. Check your provider URL, credentials, and network."]);
+  expect(logs).toEqual(["Echo: API request failed. Check your provider URL, credentials, and network."]);
 });
 
 test("times out a slow request and ignores its eventual response", CONFIG, async ($, on) => {
@@ -247,7 +247,7 @@ test("times out a slow request and ignores its eventual response", CONFIG, async
   await $.prompt.submit(submitted("fix this bugs"));
   await clock.advance(1);
   await clock.advance(30000);
-  expect(logs).toEqual(["Language Coach: API request timed out after 30 seconds."]);
+  expect(logs).toEqual(["Echo: API request timed out after 30 seconds."]);
   await clock.advance(10000);
   const pane = await $.ui.mount({ ...PANE, surface: "terminal" });
   expect(await pane.find({ type: "Markdown" })).toBeUndefined();
@@ -273,7 +273,7 @@ test("invalid API settings never make a network request", {
   expect(await $.prompt.submit(submitted("fix this bugs"))).toEqual({ text: "fix this bugs" });
   await clock.advance(1);
   expect(requests).toEqual([]);
-  expect(logs).toEqual(["Language Coach: Set base_url to a valid HTTP or HTTPS API URL."]);
+  expect(logs).toEqual(["Echo: Set base_url to a valid HTTP or HTTPS API URL."]);
 });
 
 test("accepts API prefixes and full endpoints without losing query parameters", () => {
@@ -323,7 +323,7 @@ test("Haiku failures show a UI error without blocking the coding prompt", async 
   await $.session.start(START);
   expect(await $.prompt.submit(submitted("fix this bugs"))).toEqual({ text: "fix this bugs" });
   await clock.advance(1);
-  expect(logs).toEqual(["Language Coach: Haiku review unavailable (timeout)."]);
+  expect(logs).toEqual(["Echo: Haiku review unavailable (timeout)."]);
 });
 
 test("a configured provider failure does not silently call Haiku", CONFIG, async ($, on) => {
@@ -332,5 +332,5 @@ test("a configured provider failure does not silently call Haiku", CONFIG, async
   await $.prompt.submit(submitted("fix this bugs"));
   await clock.advance(1);
   expect(modelRequests).toEqual([]);
-  expect(logs).toEqual(["Language Coach: Provider returned HTTP 401. Check your API settings."]);
+  expect(logs).toEqual(["Echo: Provider returned HTTP 401. Check your API settings."]);
 });

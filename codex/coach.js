@@ -54,9 +54,9 @@ export async function runHook(input, {
     const feedback = config.apiKey
       ? await external(input.prompt, config)
       : await native(input.prompt, config, input, env);
-    message = `Language Coach (${config.target})\n\n${feedback}`;
+    message = `Echo (${config.target})\n\n${feedback}`;
   } catch (error) {
-    message = `Language Coach: ${error.message}`;
+    message = `Echo: ${error.message}`;
   }
   if (!await isCurrent(file, token)) return {};
   // Never return additionalContext or plain stdout: both enter model context.
@@ -75,7 +75,7 @@ export async function main() {
     const input = JSON.parse(raw);
     output = await runHook(input);
   } catch {
-    output = { systemMessage: "Language Coach could not process the hook input or session state." };
+    output = { systemMessage: "Echo could not process the hook input or session state." };
   }
   process.stdout.write(`${JSON.stringify(output)}\n`);
 }

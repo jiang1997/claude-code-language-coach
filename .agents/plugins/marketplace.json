@@ -1,6 +1,6 @@
 {
   "name": "language-coach",
-  "interface": { "displayName": "Language Coach" },
+  "interface": { "displayName": "Echo" },
   "plugins": [
     {
       "name": "language-coach",

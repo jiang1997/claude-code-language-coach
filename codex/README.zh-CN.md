@@ -1,4 +1,4 @@
-# Codex CLI 语言教练
+# Echo：Codex CLI 语言教练
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
@@ -15,12 +15,12 @@ Codex 在当前轮次的下一个安全时点交付异步反馈；会话空闲�
 ## 安装
 
 ```bash
-codex plugin marketplace add jiang1997/prompt-language-coach
+codex plugin marketplace add jiang1997/Echo
 codex plugin add language-coach@language-coach
 codex
 ```
 
-进入 Codex 后，执行 `/hooks`，审核并信任 Language Coach 的 Hook。安装插件不会自动信任 Hook。如果安装时已有会话，请重新启动会话。
+进入 Codex 后，执行 `/hooks`，审核并信任 Echo 的 Hook。安装插件不会自动信任 Hook。如果安装时已有会话，请重新启动会话。
 
 本地开发时，将第一条命令改为 `codex plugin marketplace add .`。Codex 清单明确指定 `codex/hooks.json`；Claude Code 继续使用 `hooks/hooks.json`。
 

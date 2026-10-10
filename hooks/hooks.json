@@ -1,4 +1,4 @@
 {
-  "description": "Language Coach mod",
+  "description": "Echo mod",
   "modules": ["./register.js"]
 }

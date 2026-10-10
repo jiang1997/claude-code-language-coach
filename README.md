@@ -1,8 +1,8 @@
-# Language Coach for Claude Code and Codex CLI
+# Echo
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-A language coach for **Claude Code Mods** and **Codex CLI plugins**. Submit a coding prompt as usual: your coding assistant starts working immediately, while the coach checks your wording in the background.
+Echo helps you improve expression in your target language while communicating with **Claude Code** and **Codex CLI**. Submit a coding prompt as usual: your coding assistant starts working immediately, while the coach checks your wording in the background.
 
 - Correct grammar and suggest natural wording in your target language.
 - Translate prompts written in another language.
@@ -26,12 +26,14 @@ For Codex, use **Codex CLI 0.162.0+** and Node.js **22.13+ on 22.x, or 24+**. Se
 
 For Claude Code, the terminal and Desktop Code tab can show the summary and feedback pane. Other interactive clients use UI log output as a fallback. Non-interactive `claude -p` / Agent SDK runs do not automatically request coaching.
 
+The plugin and marketplace identifiers remain `language-coach`; the display name is **Echo**.
+
 ## Install in Claude Code
 
 In Claude Code:
 
 ```text
-/plugin marketplace add jiang1997/prompt-language-coach
+/plugin marketplace add jiang1997/Echo
 /plugin install language-coach@language-coach
 ```
 
@@ -40,11 +42,11 @@ If you previously installed `language-coach-statusline`, uninstall it and remove
 ## Install in Codex CLI
 
 ```bash
-codex plugin marketplace add jiang1997/prompt-language-coach
+codex plugin marketplace add jiang1997/Echo
 codex plugin add language-coach@language-coach
 ```
 
-Start a Codex session, open `/hooks`, and review and trust the Language Coach hooks. The Codex version uses background text feedback and environment-variable configuration. Full instructions: [Codex CLI guide](codex/README.md).
+Start a Codex session, open `/hooks`, and review and trust the Echo hooks. The Codex version uses background text feedback and environment-variable configuration. Full instructions: [Codex CLI guide](codex/README.md).
 
 ## Use in Claude Code
 
@@ -57,7 +59,7 @@ Submit a prompt. A short summary appears above the input while Claude continues 
 | `/coach on` | Resume coaching for this session |
 | `/coach clear` | Clear feedback and ignore any pending result |
 
-Open `/plugin` and select the installed Language Coach plugin to configure languages or an optional OpenAI-compatible provider:
+Open `/plugin` and select the installed Echo plugin to configure languages or an optional OpenAI-compatible provider:
 
 | Option | Default | Purpose |
 | --- | --- | --- |
@@ -100,7 +102,7 @@ Tests use Claude Code's native Mods test kit, mock HTTP responses, model calls, 
 This repository hosts two client adapters with one shared plugin root. Claude Code loads `.claude-plugin/plugin.json`; Codex loads `.codex-plugin/plugin.json`, which points to its own hook configuration. Each client has a marketplace entry pointing at the repository root. Local Claude Code development continues to use `claude --plugin-dir .`.
 
 ```text
-prompt-language-coach/
+Echo/
 ├── .claude-plugin/
 │   ├── plugin.json          # Plugin metadata and user options
 │   └── marketplace.json     # Claude Code marketplace

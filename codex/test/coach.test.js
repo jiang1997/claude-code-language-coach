@@ -33,7 +33,7 @@ test("unconfigured hooks use an independent Codex review and return only a UI me
     }
   });
   assert.equal(nativeCalls, 1);
-  assert.deepEqual(output, { systemMessage: `Language Coach (English)\n\n${FEEDBACK}` });
+  assert.deepEqual(output, { systemMessage: `Echo (English)\n\n${FEEDBACK}` });
   assert.equal(output.additionalContext, undefined);
   const files = await readdir(path.join(dataDir, "sessions"));
   const stored = await readFile(path.join(dataDir, "sessions", files[0]), "utf8");
@@ -53,7 +53,7 @@ test("configured API keys choose the external provider without a native fallback
       throw new Error("Provider returned HTTP 401. Check your API settings.");
     }
   });
-  assert.deepEqual(output, { systemMessage: "Language Coach: Provider returned HTTP 401. Check your API settings." });
+  assert.deepEqual(output, { systemMessage: "Echo: Provider returned HTTP 401. Check your API settings." });
 });
 
 test("explicit empty keys override a general OPENAI_API_KEY", () => {
@@ -90,7 +90,7 @@ test("late feedback cannot replace the next submitted prompt", async t => {
   const next = await runHook({ ...INPUT, turn_id: "turn-b", prompt: "second prompt" }, { dataDir, env: {}, native: async () => "new review" });
   release("old review");
   assert.deepEqual(await previous, {});
-  assert.equal(next.systemMessage, "Language Coach (English)\n\nnew review");
+  assert.equal(next.systemMessage, "Echo (English)\n\nnew review");
 });
 
 test("session end invalidates an in-flight review", async t => {
@@ -221,7 +221,7 @@ test("the real hook entry emits one JSON object and no model context", async t =
     child.stdin.end(JSON.stringify(INPUT));
   });
   assert.equal(output.stderr, "");
-  assert.deepEqual(JSON.parse(output.stdout), { systemMessage: `Language Coach (English)\n\n${FEEDBACK}` });
+  assert.deepEqual(JSON.parse(output.stdout), { systemMessage: `Echo (English)\n\n${FEEDBACK}` });
   assert.equal(request.url, "/v1/chat/completions");
   assert.equal(request.authorization, "Bearer test-key");
   assert.equal(request.body.messages[1].content, INPUT.prompt);

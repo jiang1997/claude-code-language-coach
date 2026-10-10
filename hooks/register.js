@@ -17,7 +17,7 @@ async function review($, text, config) {
     if (!reply.text?.trim()) throw new Error("Haiku returned an empty review.");
     return reply.text.trim().slice(0, 9500);
   }
-  if (!config.model) throw new Error("Configure the Language Coach model in /plugin.");
+  if (!config.model) throw new Error("Configure the Echo model in /plugin.");
   const url = chatCompletionsUrl(config.baseUrl);
   let timeout;
   try {
@@ -92,12 +92,12 @@ export function register(on, options = {}) {
         const feedback = await review($, e.text, config);
         if (ticket !== generation) return;
         latest = { original: e.text, pending: false, feedback, error: "" };
-        if (!draws) $.ui.log(`Language Coach (${config.target})\n${feedback}`);
+        if (!draws) $.ui.log(`Echo (${config.target})\n${feedback}`);
       } catch (error) {
         if (ticket !== generation) return;
         const message = error instanceof Error ? error.message : String(error);
         latest = { original: e.text, pending: false, feedback: "", error: message.slice(0, 1000) };
-        $.ui.log(`Language Coach: ${latest.error}`);
+        $.ui.log(`Echo: ${latest.error}`);
       }
       $.ui.invalidate("ui.render");
     });
@@ -117,7 +117,7 @@ export function register(on, options = {}) {
     } else if (action) {
       $.ui.log("Usage: /coach [on|off|clear]");
     } else if (draws) {
-      await $.ui.open({ id: PANE, title: "Language Coach", focus: true, closeOnEscape: true });
+      await $.ui.open({ id: PANE, title: "Echo", focus: true, closeOnEscape: true });
     } else {
       $.ui.log(latest?.feedback || latest?.error || (latest?.pending ? "Checking your prompt…" : "No language feedback yet."));
     }
@@ -134,12 +134,12 @@ export function register(on, options = {}) {
       flexDirection: "column",
       children: [
         ...(other ? [other] : []),
-        Text({ children: [`Language Coach · ${config.target}: ${summary}`] }),
+        Text({ children: [`Echo · ${config.target}: ${summary}`] }),
         Button({
           key: "coach-details",
           label: "View feedback (/coach)",
           onPress: async () => {
-            await $.ui.open({ id: PANE, title: "Language Coach", focus: true, closeOnEscape: true });
+            await $.ui.open({ id: PANE, title: "Echo", focus: true, closeOnEscape: true });
           }
         })
       ]

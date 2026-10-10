@@ -1,8 +1,8 @@
-# Claude Code 与 Codex CLI 语言教练
+# Echo
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
-一个支持 **Claude Code Mods** 与 **Codex CLI 插件**的语言教练。正常提交编程提示词，编程助手立即开始工作，教练在后台检查你的表达。
+Echo 帮助你在与 **Claude Code** 和 **Codex CLI** 沟通时，发现并改善目标语言表达中的问题。正常提交编程提示词，编程助手立即开始工作，教练在后台检查你的表达。
 
 - 检查目标语言的语法，并提供更自然的表达。
 - 将其他语言的提示词翻译成目标语言。
@@ -26,12 +26,14 @@ Codex 版需要 **Codex CLI 0.162.0+** 与 **Node.js 22.13+（22.x）或 24+**�
 
 对于 Claude Code，终端和 Desktop 的 Code 标签页可显示摘要及反馈面板；其他交互客户端通过 UI 日志显示反馈。非交互的 `claude -p` / Agent SDK 调用不会自动请求语言检查。
 
+插件和市场标识继续使用 `language-coach`，界面展示名称为 **Echo**。
+
 ## 安装到 Claude Code
 
 在 Claude Code 中执行：
 
 ```text
-/plugin marketplace add jiang1997/prompt-language-coach
+/plugin marketplace add jiang1997/Echo
 /plugin install language-coach@language-coach
 ```
 
@@ -40,11 +42,11 @@ Codex 版需要 **Codex CLI 0.162.0+** 与 **Node.js 22.13+（22.x）或 24+**�
 ## 安装到 Codex CLI
 
 ```bash
-codex plugin marketplace add jiang1997/prompt-language-coach
+codex plugin marketplace add jiang1997/Echo
 codex plugin add language-coach@language-coach
 ```
 
-进入 Codex 会话后执行 `/hooks`，审核并信任 Language Coach 的 Hook。Codex 版通过后台文字提示显示反馈，并使用环境变量配置。完整说明见 [Codex 使用指南](codex/README.zh-CN.md)。
+进入 Codex 会话后执行 `/hooks`，审核并信任 Echo 的 Hook。Codex 版通过后台文字提示显示反馈，并使用环境变量配置。完整说明见 [Codex 使用指南](codex/README.zh-CN.md)。
 
 ## 在 Claude Code 中使用
 
@@ -57,7 +59,7 @@ codex plugin add language-coach@language-coach
 | `/coach on` | 在当前会话恢复语言检查 |
 | `/coach clear` | 清空反馈并忽略尚未完成的结果 |
 
-打开 `/plugin`，选择已安装的 Language Coach，可配置语言和可选的 OpenAI 兼容服务商：
+打开 `/plugin`，选择已安装的 Echo，可配置语言和可选的 OpenAI 兼容服务商：
 
 | 选项 | 默认值 | 用途 |
 | --- | --- | --- |
@@ -100,7 +102,7 @@ Lint 和 Codex Hook 需要 Node.js 22.13+（22.x）或 24+；运行安装后的 
 本项目在同一插件根目录中提供两个客户端适配器。Claude Code 读取 `.claude-plugin/plugin.json`；Codex 读取 `.codex-plugin/plugin.json`，其中明确指定自己的 Hook 配置。两端的市场清单都指向仓库根目录。Claude Code 本地开发仍使用 `claude --plugin-dir .`。
 
 ```text
-prompt-language-coach/
+Echo/
 ├── .claude-plugin/
 │   ├── plugin.json          # 插件元数据与用户配置
 │   └── marketplace.json     # Claude Code 市场清单

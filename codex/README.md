@@ -1,4 +1,4 @@
-# Language Coach for Codex CLI
+# Echo for Codex CLI
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
@@ -15,12 +15,12 @@ Codex delivers async output at the next safe point in an active turn, or on the 
 ## Install
 
 ```bash
-codex plugin marketplace add jiang1997/prompt-language-coach
+codex plugin marketplace add jiang1997/Echo
 codex plugin add language-coach@language-coach
 codex
 ```
 
-In the Codex session, open `/hooks` and review and trust the Language Coach hooks. Installing the plugin does not automatically trust its hooks. Restart the session after installation if it was already running.
+In the Codex session, open `/hooks` and review and trust the Echo hooks. Installing the plugin does not automatically trust its hooks. Restart the session after installation if it was already running.
 
 For local development, replace the first command with `codex plugin marketplace add .`. The Codex manifest explicitly selects `codex/hooks.json`, while Claude Code continues to use `hooks/hooks.json`.
 
